@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>SaveFood — Clickable Android Prototype</title>
+<title>SaveFood — Interactive Prototype · Database Integration</title>
+<meta name="savefood-prototype-version" content="2026-11-17-db-7ac5dfea"/>
 <style>
 :root{--g:#2e7d32;--bg:#f9fafb;--ink:#1f1f1f;--sub:#6b7280;--bd:#e5e7eb;--white:#fff;--soft:#f8faf8;--logo:#e8f5e9;--hint:#9ca3af;--amber:#fff8e1;--ambertext:#8a6500;--red:#d32f2f;--greenlight:#eef7ef}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Roboto,'Arial',system-ui,sans-serif;color:var(--ink);background:#eaf0ed}button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:var(--g)}
@@ -14,13 +15,23 @@
 .toast{position:absolute;left:20px;right:20px;bottom:104px;background:#27382d;color:white;text-align:center;padding:13px;border-radius:11px;font-size:13px;box-shadow:0 6px 20px #0003;z-index:10;opacity:0;pointer-events:none;transform:translateY(12px);transition:opacity .2s,transform .2s}.toast.show{opacity:1;transform:translateY(0)}.footerNote{font-size:11px;line-height:1.5;color:#667c6c;text-align:center;max-width:420px}.smallInfoCard{background:#f3f7f4;border-radius:12px;padding:14px;margin-top:13px;color:#24442c;font-size:13px}.guidebtn{background:#fff;border:1px solid #d6e2d9;padding:9px;border-radius:8px;width:100%;color:#3d6045;text-align:left;margin:5px 0;font-size:12px}.controls{width:100%;display:flex;gap:8px}.controls button,.controls select{flex:1}.mobilePicker{display:none}.expView .workspace{grid-template-columns:1fr}.expView .panel{display:none}.expView .stage{padding-top:12px}
 @media(max-width:1040px){.workspace{grid-template-columns:215px 1fr}.right{display:none}}
 @media(max-width:680px){body{background:var(--bg)}.workspace{display:block;min-height:100dvh}.panel{display:none}.stage{padding:8px 0 12px;display:block}.stageCol{width:100%;max-width:100%;gap:7px}.stageHeader{padding:4px 10px 0}.stageHeader h2{font-size:14px}.stageHeader p{display:none}.auxBtn{padding:6px 8px;font-size:11px}.device{width:100%;max-width:440px;margin:0 auto;height:calc(100dvh - 96px);min-height:580px;border:0;border-radius:0;box-shadow:none}.mobilePicker{display:block;flex:1;min-width:0;max-width:190px}.mobilePicker select{width:100%;font-size:12px;padding:6px;border:1px solid #ccd7ce;background:white;border-radius:7px}.footerNote{display:none}.content{padding-left:24px;padding-right:24px}.stageHeader .headerTitle{display:none}}
+.modalShade{position:absolute;inset:0;z-index:30;background:#102c1bbb;display:flex;align-items:center;justify-content:center;padding:20px}.modalCard{background:white;border-radius:14px;padding:22px;width:100%;max-width:350px;max-height:94%;overflow-y:auto;box-shadow:0 20px 50px #0004}.modalCard h3{margin:0 0 12px;font-size:20px}.versionLabel{font-size:11px;color:#53735b;overflow-wrap:anywhere}.device{isolation:isolate}.guidebtn:focus-visible,.auxBtn:focus-visible,button:focus-visible{outline:3px solid #83b78a;outline-offset:2px}
 </style>
 </head>
 <body>
 <div class="workspace">
-<aside class="panel"><div class="brand"><span class="logoCircle" id="sideLogo"></span><div><h1>SaveFood</h1><small>Interactive prototype</small></div></div><p class="intro muted">Source-based recreation of committed Android layouts. Click through the demo workflows.</p><div class="badge">GitHub main · 14 Nov 2026</div><div id="sidebar"></div><h2>Repository</h2><p class="metaP">Snapshot: <code>c4ddfae1</code><br>Java + Android XML<br>Demo data only, no SQLite<br>Not an Android emulator</p></aside>
-<main class="stage"><div class="stageCol"><div class="stageHeader"><div class="headerTitle"><h2 id="outerTitle">Welcome</h2><p id="outerSubtitle">Clickable UI recreation · source fidelity, not a build</p></div><div class="mobilePicker"><select id="screenPicker" aria-label="Jump to a screen"></select></div><div class="row"><button class="auxBtn" id="resetBtn" title="Reset all browser-only demo data">↻ Reset</button><button class="auxBtn" id="homeBtn">⌂ Start</button><button class="auxBtn" id="expandBtn">⤢ View</button></div></div><div class="device" id="device"><div class="sys"><span class="clock">9:41</span><svg class="rsvg" viewBox="0 0 24 24"><path fill="currentColor" d="M1 15 12 5l11 10-11 0z"/></svg><svg class="rsvg" viewBox="0 0 24 24"><rect fill="currentColor" x="1" y="14" width="4" height="8" rx="1"/><rect fill="currentColor" x="7" y="10" width="4" height="12" rx="1"/><rect fill="currentColor" x="13" y="6" width="4" height="16" rx="1"/><rect fill="currentColor" x="19" y="2" width="4" height="20" rx="1"/></svg><svg class="rsvg" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="5" y="8" width="13" height="8" rx="1" fill="currentColor"/></svg></div><div class="screen" id="screen" aria-live="polite"></div><div id="navMount"></div><div class="androidBottom"><i></i></div><div class="toast" id="toast"></div></div><div class="footerNote">Prototype interaction is simulated locally and resets when refreshed. No account, order, message, or database record is created in the Android app.</div></div></main>
-<aside class="panel right"><h1 style="font-size:18px">Prototype guide</h1><p class="muted">Use the screen picker or click through these paths.</p><div class="sourceCard"><b>Customer journey</b><p>Welcome → demo Login → Customer Home → Restaurants → Food → Checkout → Order Status → History.</p></div><div class="sourceCard"><b>Manager journey</b><p>Welcome → demo Login → Manager Home → Inventory / Add Food / Orders → Order Details → History.</p></div><h2>Quick start</h2><button class="guidebtn" data-route="welcome">Welcome / launch screen</button><button class="guidebtn" data-route="login" data-role="customer">Customer login</button><button class="guidebtn" data-route="login" data-role="manager">Manager login</button><button class="guidebtn" data-route="morders">Explore manager order workflow</button><h2>Demo accounts</h2><p class="metaP">Customer<br><b>customer@savefood.test</b><br>Manager<br><b>manager@savefood.test</b><br>Password for both: <b>Demo123!</b></p><h2>Scope & limitations</h2><p class="metaP">The prototype copies the activities, labels, colors, general layout organization, and demo flows inspected in the repository. It is not a pixel-verified emulator capture. It does not share the Android database or runtime. Manager orders and customer orders intentionally use separate demo datasets, as in the inspected Java source.</p></aside>
+<aside class="panel"><div class="brand"><span class="logoCircle" id="sideLogo"></span><div><h1>SaveFood</h1><small>Interactive prototype</small></div></div><p class="intro muted">Recreation of the latest committed Android layouts and connected customer / manager workflows.</p><div class="badge">Database integration · 17 Nov 2026</div><div id="sidebar"></div><h2>Repository</h2><p class="metaP">Snapshot: <code>7ac5dfea</code><br><span class="versionLabel">feature/giovan-database-integration</span><br>Java + Android XML recreation<br>Browser demo data<br><span id="sessionInfo"></span></p></aside>
+<main class="stage"><div class="stageCol"><div class="stageHeader"><div class="headerTitle"><h2 id="outerTitle">Welcome</h2><p id="outerSubtitle">Clickable UI recreation · source fidelity, not a build</p></div><div class="mobilePicker"><select id="screenPicker" aria-label="Jump to a screen"></select></div><div class="row"><button class="auxBtn" id="resetBtn" title="Reset all browser-only demo data">↻ Reset</button><button class="auxBtn" id="switchBtn">Demo login</button><button class="auxBtn" id="homeBtn">⌂ Start</button><button class="auxBtn" id="expandBtn">⤢ View</button></div></div><div class="device" id="device"><div class="sys"><span class="clock">9:41</span><svg class="rsvg" viewBox="0 0 24 24"><path fill="currentColor" d="M1 15 12 5l11 10-11 0z"/></svg><svg class="rsvg" viewBox="0 0 24 24"><rect fill="currentColor" x="1" y="14" width="4" height="8" rx="1"/><rect fill="currentColor" x="7" y="10" width="4" height="12" rx="1"/><rect fill="currentColor" x="13" y="6" width="4" height="16" rx="1"/><rect fill="currentColor" x="19" y="2" width="4" height="20" rx="1"/></svg><svg class="rsvg" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="5" y="8" width="13" height="8" rx="1" fill="currentColor"/></svg></div><div class="screen" id="screen" aria-live="polite"></div><div id="navMount"></div><div class="androidBottom"><i></i></div><div class="toast" id="toast" role="status"></div><div id="dialogMount"></div></div><div class="footerNote"><span id="persistenceInfo"></span> This web prototype uses browser storage and is separate from the Android SQLite database.</div></div></main>
+<aside class="panel right"><h1 style="font-size:18px">Prototype guide</h1><p class="muted">Test both roles in the same browser. Use Switch account between roles.</p>
+<div class="sourceCard"><b>Customer journey</b><p>Log in → search Vancouver → Green Garden → Vegetable Sandwich → Checkout → Confirm.</p></div>
+<div class="sourceCard"><b>Manager journey</b><p>Switch account → manager login → Orders → Accept → Ready → Create reminder → Picked Up / Delivered.</p></div>
+<div class="sourceCard"><b>Check the result</b><p>Switch back to the customer. Open Order History to see the same order, status, total and reminder. Cancellation or rejection returns stock.</p></div>
+<h2>Quick start</h2><button class="guidebtn" data-route="welcome">Welcome / launch screen</button><button class="guidebtn" data-act="demoLogin" data-role="customer">Customer login</button><button class="guidebtn" data-act="demoLogin" data-role="manager">Manager login</button><button class="guidebtn" data-route="register">Create a new account</button>
+<h2>Demo accounts</h2><p class="metaP">Customer<br><b>customer@savefood.test</b><br>Manager<br><b>manager@savefood.test</b><br>Password for both: <b>Demo123!</b></p>
+<h2>New account workflow</h2><p class="metaP">Register as a manager, then set up a restaurant on the dashboard. Add food, switch to a customer, and search the same city. Profile changes, listings, orders, reminders and sessions survive refresh. Reset restores the starting demo.</p>
+<h2>Demo scope</h2><p class="metaP">Sample accounts and food are preloaded for this web demo. The demo manager owns Green Garden. Other sample restaurants are for browsing. Your teammates each have their own browser data; use one browser to demonstrate both roles. No email or push message is sent. Guest browsing, password recovery and dietary filtering remain unavailable, matching the inspected app.</p>
+<p class="metaP">Browser storage simulates the Android Room / SQLite persistence. It does not connect to your Android installation. The screen layouts are source-based recreations, not emulator screenshots.</p>
+<p class="metaP"><a href="https://github.com/user09022022/SaveFood-Prototype/blob/main/index.html" target="_blank" rel="noopener">View / download standalone HTML</a></p></aside>
 </div>
 <script>
 'use strict';
@@ -39,21 +50,260 @@ const ICONS={
 const ico=(key,size=23)=>`<svg aria-hidden="true" viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" style="flex:none">${ICONS[key]||ICONS.food}</svg>`;
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>'$'+Number(n||0).toFixed(2);
-const restaurants=[{id:101,name:'Green Garden',city:'Vancouver',address:'123 Example Street'}, {id:102,name:'Sunrise Bakery',city:'Burnaby',address:'45 Sample Avenue'}, {id:103,name:'Fresh Bowl',city:'New Westminster',address:'78 Example Road'}];
+
+const seedRestaurants=[{id:101,name:'Green Garden',city:'Vancouver',address:'123 Example Street'}, {id:102,name:'Sunrise Bakery',city:'Burnaby',address:'45 Sample Avenue'}, {id:103,name:'Fresh Bowl',city:'New Westminster',address:'78 Example Road'}];
 const seedFoods=[{id:501,rid:101,name:'Vegetable Sandwich',description:'Fresh vegetables on whole grain bread',category:'Sandwiches',orig:8.5,price:4.25,qty:5},{id:502,rid:101,name:'Fruit Salad',description:'Assorted seasonal fruit',category:'Salads',orig:7,price:3.5,qty:0},{id:503,rid:102,name:'Bread Surprise Bag',description:'Assorted fresh bakery items',category:'Bakery',orig:12,price:6,qty:6},{id:504,rid:102,name:'Cheese Croissant',description:'Fresh baked cheese croissant',category:'Bakery',orig:5,price:2.5,qty:3},{id:505,rid:103,name:'Rice Bowl',description:'Rice with vegetables and sauce',category:'Meals',orig:13,price:6.5,qty:4},{id:506,rid:103,name:'Veggie Wrap',description:'Vegetable wrap with dressing',category:'Wraps',orig:9.75,price:4.5,qty:0}];
-const seededManagerOrders=[
-{id:2101,customer:'Alex Chen',type:'Pickup',status:'Pending',food:'Vegetable Sandwich',qty:2,price:4.25},
-{id:2102,customer:'Jamie Lee',type:'Delivery',status:'Pending',food:'Fruit Salad',qty:1,price:3.5},
-{id:2103,customer:'Taylor Smith',type:'Pickup',status:'Accepted',food:'Vegetable Sandwich',qty:1,price:4.25},
-{id:2104,customer:'Morgan Patel',type:'Delivery',status:'Ready',food:'Vegetable Sandwich',qty:2,price:4.25},
-{id:2105,customer:'Casey Wong',type:'Pickup',status:'Picked Up',food:'Vegetable Sandwich',qty:1,price:4.25},
-{id:2106,customer:'Jordan Brown',type:'Delivery',status:'Rejected',food:'Fruit Salad',qty:2,price:3.5}
-];
-const S={screen:'welcome',history:[],role:'customer',session:false,city:'',selectedRid:101,selectedFood:501,qty:1,cart:[],orders:[],selectedOrder:null,selectedManagerOrder:2101,managerOrders:[],managerFoods:[],managerFoodId:null,managerFilter:'All active orders',historyFilter:'All history',inventoryCategory:'All categories',inventorySearch:'',inventoryDate:'',foodSearch:'',foodCategory:'All categories',foodPrice:'All prices',restaurantSearch:'',fulfillment:'Pickup',lastRole:'customer',noteHistory:[],};
-function resetData(){S.cart=[];S.orders=[];S.selectedOrder=null;S.managerOrders=seededManagerOrders.map(o=>({...o,date:new Date().toLocaleDateString('en-CA'),reminder:null}));S.managerFoods=seedFoods.filter(f=>f.rid===101).map((f,i)=>({...f,active:true,date:new Date(Date.now()+i*86400000).toISOString().slice(0,10),time:'18:00'}));S.managerFoodId=null;S.selectedManagerOrder=2101;S.role='customer';S.session=false;S.city='';S.restaurantSearch='';S.foodSearch='';S.foodCategory='All categories';S.foodPrice='All prices';S.inventoryCategory='All categories';S.inventorySearch='';S.inventoryDate='';S.qty=1;S.history=[]}
-resetData();
+
+// Standalone browser demonstration of the inspected Android workflow.
+const PROTOTYPE_VERSION = '2026-11-17-db-7ac5dfea';
+const SOURCE_COMMIT = '7ac5dfea2b2f60258039808aa0a4a91ee0c44b60';
+const STORAGE_KEY = 'savefood_prototype_v2';
+const DEMO_HASH = '831aa5fa459ef208ee94c7fa659c80e1:72121a868e0eb164b03ee6af3a05878a89ad14f1376d176dbd85dbf4c7e2970f';
+const clone = value => JSON.parse(JSON.stringify(value));
+const todayDate = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+};
+const todayTime = () => `${todayDate()} ${new Date().toTimeString().slice(0,5)}`;
+let storageWorks = true;
+let storageNotice = '';
+function startingData() {
+  return {
+    version: 2,
+    users: [
+      {id:1,name:'Demo Manager',email:'manager@savefood.test',phone:'604-555-0101',address:'123 Example Street',role:'manager',passwordHash:DEMO_HASH},
+      {id:2,name:'Demo Customer',email:'customer@savefood.test',phone:'604-555-0102',address:'45 Example Avenue',role:'customer',passwordHash:DEMO_HASH}
+    ],
+    restaurants: seedRestaurants.map((r,i)=>({...r,managerId:i===0?1:100+i})),
+    foods: seedFoods.map(f=>({...f,active:true,date:todayDate(),time:'18:00'})),
+    orders: [],
+    session: null
+  };
+}
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const value = JSON.parse(raw);
+      if (value.version===2 && ['users','restaurants','foods','orders'].every(k=>Array.isArray(value[k]))) return value;
+      storageNotice = 'Demo data was reset after a format change.';
+    }
+  } catch (error) {
+    storageWorks = false;
+    storageNotice = 'Browser storage is unavailable. This demo will keep changes only while this page stays open.';
+  }
+  return startingData();
+}
+let D = loadData();
+const S = {screen:'welcome',history:[],selectedRid:101,selectedFood:501,qty:1,cart:[],selectedOrder:null,
+  selectedManagerOrder:null,managerFoodId:null,managerFilter:'All active orders',historyFilter:'All history',
+  inventoryCategory:'All categories',inventorySearch:'',inventoryDate:'',foodSearch:'',foodCategory:'All categories',
+  foodPrice:'All prices',restaurantSearch:'',city:'',fulfillment:'Pickup',loginRole:null,setupOpen:false,busy:false};
+function persist(value=D) {
+  try {
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(value));
+    storageWorks = true;
+    return true;
+  } catch (error) {
+    storageWorks = false;
+    return false;
+  }
+}
+function transact(change) {
+  const next = clone(D);
+  const result = change(next);
+  if (!persist(next) && storageNotice==='') {
+    storageNotice = 'Browser storage is unavailable. Changes last only until this page closes.';
+  }
+  D = next;
+  return result;
+}
+function resetData() {
+  D = startingData();
+  persist();
+  Object.assign(S,{screen:'welcome',history:[],cart:[],selectedOrder:null,selectedManagerOrder:null,
+    managerFoodId:null,selectedRid:101,selectedFood:501,qty:1,restaurantSearch:'',foodSearch:'',
+    foodCategory:'All categories',foodPrice:'All prices',inventoryCategory:'All categories',inventorySearch:'',
+    inventoryDate:'',managerFilter:'All active orders',historyFilter:'All history',setupOpen:false,loginRole:null,fulfillment:'Pickup'});
+}
+function currentUser() { return D.users.find(u=>u.id===D.session?.userId)||null; }
+function managerRestaurant() { return D.restaurants.find(r=>r.managerId===currentUser()?.id)||null; }
+function customerOrders() { return currentUser()?.role==='customer'?D.orders.filter(o=>o.customerId===currentUser().id):[]; }
+function managerOrders() { const r=managerRestaurant(); return currentUser()?.role==='manager'&&r?D.orders.filter(o=>o.rid===r.id):[]; }
+function managerFoods() { const r=managerRestaurant(); return currentUser()?.role==='manager'&&r?D.foods.filter(f=>f.rid===r.id):[]; }
+function isOpen(o) { return ['Pending','Accepted','Ready'].includes(o.status); }
+function getRestaurant(id) { return D.restaurants.find(r=>r.id===Number(id))||{name:'Unknown restaurant',city:'',address:''}; }
+function getFood(id) { return D.foods.find(f=>f.id===Number(id)); }
+function nextId(rows) { return Math.max(0,...rows.map(row=>row.id))+1; }
+function subtotal() { return S.cart.reduce((sum,c)=>sum+Math.round(c.price*100)*c.qty,0)/100; }
+function productCount() { return S.cart.reduce((sum,c)=>sum+c.qty,0); }
+function recentCustomerOrder() { return customerOrders().at(-1)||null; }
+function selectedCustomerOrder() { return customerOrders().find(o=>o.id===S.selectedOrder)||recentCustomerOrder(); }
+function selectedManagerOrder() { return managerOrders().find(o=>o.id===S.selectedManagerOrder)||null; }
+function filteredRestaurants() {
+  return D.restaurants.filter(r=>r.city.toLowerCase().includes(S.restaurantSearch.trim().toLowerCase()));
+}
+function filteredFoods() {
+  return D.foods.filter(f=>f.rid===S.selectedRid && f.active && f.qty>0
+    && f.name.toLowerCase().includes(S.foodSearch.toLowerCase())
+    && (S.foodCategory==='All categories'||f.category===S.foodCategory)
+    && (S.foodPrice==='All prices'||(S.foodPrice==='Under $5'&&f.price<5)
+      ||(S.foodPrice==='$5 to $10'&&f.price>=5&&f.price<=10)||(S.foodPrice==='Over $10'&&f.price>10)));
+}
+function filteredInventory() {
+  return managerFoods().filter(f=>f.name.toLowerCase().includes(S.inventorySearch.toLowerCase())
+    &&(S.inventoryCategory==='All categories'||f.category===S.inventoryCategory)
+    &&(!S.inventoryDate||f.date===S.inventoryDate));
+}
+function requiredRole(screen) {
+  if (['home','restaurants','restaurant','food','checkout','status','history'].includes(screen)) return 'customer';
+  if (['mhome','inventory','editfood','morders','mdetails','mhistory'].includes(screen)) return 'manager';
+  return null;
+}
+function goto(screen,opts={}) {
+  if (!(screen in names)) return;
+  const role = requiredRole(screen);
+  if (role && currentUser()?.role!==role) {
+    S.loginRole=role;
+    S.history=[];
+    S.screen='login';
+    render();
+    toast('Please log in as a '+(role==='manager'?'restaurant manager':'customer'));
+    return;
+  }
+  S.history.push(S.screen);
+  Object.assign(S,opts,{screen});
+  if (screen==='mhome') S.setupOpen=!managerRestaurant();
+  render();
+}
+function back() {
+  const target=S.history.pop()||'welcome';
+  const role=requiredRole(target);
+  S.screen=role&&currentUser()?.role!==role?'welcome':target;
+  render();
+}
+function logout(toLogin=false,role=null) {
+  transact(db=>{db.session=null;});
+  Object.assign(S,{cart:[],history:[],screen:toLogin?'login':'welcome',loginRole:role,setupOpen:false,
+    selectedOrder:null,selectedManagerOrder:null,managerFoodId:null});
+  render();
+}
+const hex = bytes => Array.from(new Uint8Array(bytes),b=>b.toString(16).padStart(2,'0')).join('');
+function unhex(value) { return Uint8Array.from(value.match(/.{2}/g)||[],b=>parseInt(b,16)); }
+async function passwordHash(password,salt) {
+  if (!crypto.subtle) throw new Error('Open the HTTPS web link to use account registration.');
+  const bytes=salt?unhex(salt):crypto.getRandomValues(new Uint8Array(16));
+  const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveBits']);
+  const bits=await crypto.subtle.deriveBits({name:'PBKDF2',salt:bytes,iterations:200000,hash:'SHA-1'},key,256);
+  return hex(bytes)+':'+hex(bits);
+}
+async function authenticate(email,password) {
+  const u=D.users.find(u=>u.email===email.trim().toLowerCase());
+  if (!u || (await passwordHash(password,u.passwordHash.split(':')[0]))!==u.passwordHash) throw new Error('Invalid email or password');
+  S.cart=[];
+  transact(db=>{db.session={userId:u.id};});
+  S.history=[];
+  S.loginRole=null;
+  goto(u.role==='manager'?'mhome':'home');
+}
+function requireUser(role) {
+  const user=currentUser();
+  if (!user||user.role!==role) throw new Error('Please sign in to the correct account.');
+  return user;
+}
+function createOrder() {
+  const user=requireUser('customer');
+  if (!S.cart.length) throw new Error('Your cart is empty');
+  if (!['Pickup','Delivery'].includes(S.fulfillment)) throw new Error('Choose Pickup or Delivery');
+  const orderId=transact(db=>{
+    const rid=getFood(S.cart[0].id)?.rid;
+    const items=[];
+    for (const cart of S.cart) {
+      const f=db.foods.find(f=>f.id===cart.id);
+      if (!f||!f.active||f.rid!==rid||!Number.isInteger(cart.qty)||cart.qty<1||cart.qty>f.qty||f.price!==cart.price) {
+        throw new Error('A cart item changed. Remove it and select it again.');
+      }
+      f.qty-=cart.qty;
+      items.push({id:f.id,name:f.name,qty:cart.qty,price:f.price});
+    }
+    const id=nextId(db.orders);
+    db.orders.push({id,customerId:user.id,customer:user.name,rid,type:S.fulfillment,status:'Pending',date:todayTime(),
+      items,total:items.reduce((sum,it)=>sum+Math.round(it.price*100)*it.qty,0)/100,reminder:null});
+    return id;
+  });
+  S.cart=[];
+  S.selectedOrder=orderId;
+  return orderId;
+}
+function restoreStock(db,o) {
+  for (const item of o.items) {
+    const f=db.foods.find(f=>f.id===item.id);
+    if (f) f.qty+=item.qty;
+  }
+}
+function changeStatus(id,target) {
+  requireUser('manager');
+  const rid=managerRestaurant()?.id;
+  return transact(db=>{
+    const o=db.orders.find(o=>o.id===id&&o.rid===rid);
+    const allowed=o&&((o.status==='Pending'&&['Accepted','Rejected'].includes(target))
+      ||(o.status==='Accepted'&&target==='Ready')
+      ||(o.status==='Ready'&&target===(o.type==='Pickup'?'Picked Up':'Delivered')));
+    if (!allowed) throw new Error('This status change is not allowed');
+    o.status=target;
+    if (target==='Rejected') restoreStock(db,o);
+    return true;
+  });
+}
+function cancelOrder(id) {
+  const user=requireUser('customer');
+  transact(db=>{
+    const o=db.orders.find(o=>o.id===id&&o.customerId===user.id);
+    if (!o||o.status!=='Pending') throw new Error('Only pending orders can be cancelled');
+    o.status='Cancelled';
+    restoreStock(db,o);
+  });
+}
+function createReminder(id) {
+  requireUser('manager');
+  const rid=managerRestaurant()?.id;
+  transact(db=>{
+    const o=db.orders.find(o=>o.id===id&&o.rid===rid);
+    if (!o||o.status!=='Ready'||o.reminder) throw new Error('Reminder cannot be created for this order');
+    o.reminder={date:todayTime(),message:`Your SaveFood order #${o.id} is ready for ${o.type.toLowerCase()}.`};
+  });
+}
+function validDate(date) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return false;
+  const d=new Date(date+'T12:00:00Z');
+  return !Number.isNaN(d.valueOf())&&d.toISOString().slice(0,10)===date;
+}
+function saveFood(values) {
+  requireUser('manager');
+  const r=managerRestaurant();
+  if (!r) throw new Error('Set up your restaurant first');
+  const name=String(values.get('name')||'').trim(),description=String(values.get('description')||'').trim();
+  const orig=Number(values.get('orig')),price=Number(values.get('price')),qty=Number(values.get('qty'));
+  const date=String(values.get('date')||''),time=String(values.get('time')||'');
+  if (!name||!description) throw new Error('Enter a food name and description');
+  if (!(Number.isFinite(orig)&&Number.isFinite(price)&&orig>0&&price>0&&price<orig&&Number.isInteger(qty)&&qty>=0)) throw new Error('Enter valid prices and quantity');
+  if (!validDate(date)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) throw new Error('Enter a valid date and 24-hour time');
+  const editing=S.managerFoodId;
+  transact(db=>{
+    const old=db.foods.find(f=>f.id===editing&&f.rid===r.id);
+    if (editing&&!old) throw new Error('Food item not found');
+    const item={id:old?.id??nextId(db.foods),rid:r.id,name,description,category:String(values.get('category')||'Other'),orig,price,qty,date,time,active:old?.active??true};
+    if (old) Object.assign(old,item); else db.foods.push(item);
+  });
+  S.managerFoodId=null;
+  goto('inventory');
+  toast(editing?'Food item updated':'Food item added');
+}
+persist();
+
 const names={welcome:'Welcome',login:'Log In',register:'Create Account',profile:'My Profile',home:'Customer Home',restaurants:'Restaurant List',restaurant:'Restaurant Details',food:'Food Details',checkout:'Checkout',status:'Order Status',history:'Order History',mhome:'Manager Home',inventory:'Food Inventory',editfood:'Add / Edit Food',morders:'Manager Orders',mdetails:'Manager Order Details',mhistory:'Manager Order History',legacy:'Legacy MainActivity',components:'Reusable XML Gallery'};
 const sections=[['Authentication & Profile',['welcome','login','register','profile']],['Customer Module',['home','restaurants','restaurant','food','checkout','status','history']],['Restaurant Manager',['mhome','inventory','editfood','morders','mdetails','mhistory']],['Extra / XML',['components','legacy']]];
+
 function headerBack(title){return `<div class="backrow"><button class="back" data-act="back" aria-label="Back">${ico('back')}</button><div class="pageTitle">${esc(title)}</div></div>`}
 function logo(big=false){return `<span class="logoCircle ${big===true?'big':big==='medium'?'medium':''}">${ico('leaf',big===true?65:big==='medium'?42:24)}</span>`}
 function topBrand(manager=false){return `<div class="managerHeader">${logo()} <span class="titleBrand grow">SaveFood</span><button class="circleIcon" data-route="profile" title="Profile">${manager?'<b>M</b>':ico('profile')}</button></div>`}
@@ -62,52 +312,320 @@ function navType(){if(['home','restaurants','restaurant','food','checkout','stat
 function nav(){let type=navType();if(!type)return '';let isMgr=type==='manager',routes=isMgr?['mhome','inventory','morders','profile']:['home','restaurants','history','profile'];let selected=isMgr?(['mhome'].includes(S.screen)?0:['inventory','editfood'].includes(S.screen)?1:['morders','mdetails','mhistory'].includes(S.screen)?2:3):(['home'].includes(S.screen)?0:['restaurants','restaurant','food','checkout'].includes(S.screen)?1:['status','history'].includes(S.screen)?2:3);return `<div class="bottomnav">${['Home',isMgr?'Inventory':'Search','Orders','Profile'].map((t,i)=>`<button data-route="${routes[i]}" class="${i===selected?'sel':''}" title="${t}">${ico(['home','search','orders','profile'][i])}<span>${t}</span></button>`).join('')}</div>`}
 function pane(title,subtitle=''){return `<div class="content"><h2 class="pageTitle">${esc(title)}</h2>${subtitle?`<div class="sub">${esc(subtitle)}</div>`:''}`}
 function searchField(id,placeholder,val){return `<div class="searchwrap">${ico('search',21)}<input class="inp" id="${id}" placeholder="${esc(placeholder)}" value="${esc(val)}" /></div>`}
-function productCount(){return S.cart.reduce((a,c)=>a+c.qty,0)}
-function subtotal(){return S.cart.reduce((a,c)=>{let f=seedFoods.find(x=>x.id===c.id);return a+(f?f.price*c.qty:0)},0)}
-function recentCustomerOrder(){return S.orders.length?S.orders[S.orders.length-1]:null}
-function getRestaurant(rid){return restaurants.find(r=>r.id===Number(rid))||restaurants[0]}
-function getFood(fid){return seedFoods.find(f=>f.id===Number(fid))||seedFoods[0]}
-function goto(screen,opts={}){if(!(screen in names))return;S.history.push(S.screen);S.screen=screen;Object.assign(S,opts);render()}
-function back(){S.screen=S.history.pop()||'welcome';render()}
 function toast(msg){let x=document.getElementById('toast');x.textContent=msg;x.classList.add('show');clearTimeout(window._toastTimer);window._toastTimer=setTimeout(()=>x.classList.remove('show'),3000)}
-const todayTime=()=>new Date().toLocaleString('en-CA',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
 function welcome(){return `<div class="content p32" style="min-height:100%;display:flex;flex-direction:column;padding-top:74px;padding-bottom:26px;align-items:center">${logo(true)}<div class="center" style="font-size:28px;color:var(--g);font-weight:700;margin-top:24px">Welcome to SaveFood</div><div class="formSub" style="margin-top:14px">Save money, reduce food waste, and discover great meals near you.</div><div style="flex:1;min-height:65px"></div><div style="width:100%">${btn('Log In','',{route:'login'})}<div class="mt10">${btn('Create Account','',{route:'register',soft:true})}</div><button class="clicktext" style="width:100%;margin-top:10px" data-act="guest">Continue as Guest</button></div></div>`}
-function login(){return `<div class="content p32 stdForm">${headerBack('')}<div class="formTitle">Log In</div><div class="formSub">Welcome back! Please enter your details.</div><form id="loginForm" data-form="login"><div class="fieldGroup" style="margin-top:50px"><label>Email Address</label><input class="inp" name="email" placeholder="Enter your email" type="email" required autocomplete="off"/></div><div class="fieldGroup" style="margin-top:22px"><label>Password</label><input class="inp" name="password" id="loginPassword" placeholder="Enter your password" type="password" required/></div><label class="radioLine" style="color:var(--sub)"><input type="checkbox" data-show="loginPassword"/>Show password</label><button type="button" class="clicktext" data-act="forgot" style="display:block;width:100%;text-align:right">Forgot Password?</button><div class="mt14">${btn('Log In')}</div></form><div class="center mt28"><button class="clicktext" data-route="register">No account? Sign Up</button></div></div>`}
+function login(){return `<div class="content p32 stdForm">${headerBack('')}<div class="formTitle">Log In</div><div class="formSub">Welcome back! Please enter your details.</div><form id="loginForm" data-form="login"><div class="fieldGroup" style="margin-top:50px"><label>Email Address</label><input class="inp" name="email" placeholder="Enter your email" type="email" required autocomplete="username"/></div><div class="fieldGroup" style="margin-top:22px"><label>Password</label><input class="inp" name="password" id="loginPassword" placeholder="Enter your password" type="password" required autocomplete="current-password"/></div><label class="radioLine" style="color:var(--sub)"><input type="checkbox" data-show="loginPassword"/>Show password</label><button type="button" class="clicktext" data-act="forgot" style="display:block;width:100%;text-align:right">Forgot Password?</button><div class="mt14">${btn('Log In')}</div></form><div class="center mt28"><button class="clicktext" data-route="register">No account? Sign Up</button></div></div>`}
 function register(){let f=(lbl,key,hint,type='text')=>`<div class="fieldGroup"><label>${lbl}</label><input name="${key}" class="inp" placeholder="${hint}" type="${type}" ${key==='password'||key==='confirm'?'minlength="8"':''} required/></div>`;return `<div class="content p32 stdForm">${headerBack('')}<div class="formTitle">Create Account</div><div class="formSub">Join SaveFood and help reduce food waste.</div><form data-form="register">${f('Full Name','name','Enter your full name')}${f('Email Address','email','Enter your email','email')}${f('Phone Number','phone','Enter your phone number','tel')}${f('Address','address','Enter your address')}${f('Password','password','At least 8 characters','password')}${f('Confirm Password','confirm','Re-enter your password','password')}<label class="radioLine" style="margin-top:5px"><input type="checkbox" data-show="registerPasswords"/>Show passwords</label><div class="fieldGroup"><label>Account Type</label><label class="radioLine"><input type="radio" name="role" value="Customer" required/>Customer</label><label class="radioLine"><input type="radio" name="role" value="Restaurant Manager" required/>Restaurant Manager</label></div><div class="mt20">${btn('Create Account')}</div></form><button class="clicktext" data-route="login" style="width:100%;margin-top:11px">Already have an account? Log In</button></div>`}
-function profile(){return `<div class="content p32 stdForm">${headerBack('') }<div style="display:flex;justify-content:center">${logo('medium')}</div><h2 class="center" style="font-size:26px;margin:15px 0 6px">My Profile</h2><div class="center strong" style="font-size:18px">No active account</div><div class="sub center mt6">Sign in to view your account details</div><div class="center green mt6" style="font-size:14px">Not signed in</div><p class="sub center mt20" style="font-size:12px">Account information will appear after SQLite login is connected.</p><h3 class="heading mt28">Personal Information</h3><form data-form="profile">${[['Full Name','name','Your full name'],['Phone Number','phone','Your phone number'],['Address','address','Your address']].map(([l,n,h])=>`<div class="fieldGroup"><label>${l}</label><input name="${n}" class="inp" placeholder="${h}" required/></div>`).join('')}<div class="mt28">${btn('Save Changes')}</div></form><div class="mt10">${btn('Back to Welcome','',{route:'welcome',soft:true})}</div></div>`}
-function home(){let o=recentCustomerOrder();return `${topBrand()}<div class="content"><h2 class="pageTitle">Hi, Customer</h2><div class="sub">Find local food deals and help reduce waste.</div><h3 class="heading" style="margin-top:32px">Search Restaurants</h3>${searchField('customerCity','City or location',S.city)}${btn('Search','homeSearch')}
+function home(){let o=recentCustomerOrder();return `${topBrand()}<div class="content"><h2 class="pageTitle">Hi, ${esc(currentUser()?.name||'Customer')}</h2><div class="sub">Find local food deals and help reduce waste.</div><h3 class="heading" style="margin-top:32px">Search Restaurants</h3>${searchField('customerCity','City or location',S.city)}${btn('Search','homeSearch')}
 <h3 class="heading" style="margin-top:33px">Current Order</h3><div class="card"><div class="row" style="align-items:flex-start"><div class="logoCircle" style="width:64px;height:64px;border-radius:10px">${ico('store')}</div><div class="vcol grow"><strong>${esc(o?getRestaurant(o.rid).name:'No active order')}</strong><span class="sub">${esc(o?'Order #'+o.id:'Search restaurants to get started')}</span><span><span class="chip">${esc(o?o.status:'No orders')}</span></span></div></div><div class="mt14">${btn('View Order','viewLatest',{outline:true,disabled:!o})}</div></div>
 <h3 class="heading">Quick Access</h3><div class="shortcutGrid"><button data-route="history" class="shortcut"><strong>Order History ›</strong><span>Review previous orders</span></button><button data-route="profile" class="shortcut"><strong>Profile ›</strong><span>View account details</span></button></div></div>`}
-function filteredRestaurants(){return restaurants.filter(r=>r.city.toLowerCase().includes(S.restaurantSearch.trim().toLowerCase()))}
 function restaurantsScreen(){let arr=filteredRestaurants();return `<div class="content" style="padding-top:26px"><h2 class="pageTitle">Search Restaurants</h2><div style="margin:30px 12px 0">${searchField('restaurantCity','City or location',S.restaurantSearch)}${btn('Search','filterRestaurants')}</div><h3 class="heading">Available Restaurants</h3><p class="sub" id="restaurantCount">${arr.length?arr.length+' restaurants found':'No restaurants found'}</p><div class="listSimple" id="restaurantResults">${arr.map(r=>`<button data-act="openRestaurant" data-id="${r.id}">${esc(r.name)} - ${esc(r.city)}</button>`).join('')||'<div class="empty">No restaurants found</div>'}</div></div>`}
-function restaurantScreen(){let r=getRestaurant(S.selectedRid),foods=seedFoods.filter(f=>f.rid===r.id);let cats=['All categories',...new Set(foods.map(f=>f.category))];let shown=filteredFoods();return `<div class="content" style="padding:21px 20px 28px"><div class="row"><button class="back" data-act="back" aria-label="Back">${ico('back')}</button><div><h2 class="pageTitle" style="font-size:20px">${esc(r.name)}</h2><span class="sub">${esc(r.city+' - '+r.address)}</span></div></div><div class="mt28" style="margin-left:16px;margin-right:16px">${searchField('foodSearch','Search food by name',S.foodSearch)}</div><h3 class="heading">Filters</h3><div class="filter3"><select class="selinp" id="foodCat">${cats.map(c=>`<option ${S.foodCategory===c?'selected':''}>${esc(c)}</option>`).join('')}</select><select class="selinp" id="foodPrice">${['All prices','Under $5','$5 to $10','Over $10'].map(x=>`<option ${x===S.foodPrice?'selected':''}>${esc(x)}</option>`).join('')}</select><select class="selinp" disabled aria-label="Dietary filter not implemented"><option>Dietary</option></select></div><h3 class="heading">Available Food</h3><p class="sub" id="foodCount">${shown.length?shown.length+' food items found':'No food items found'}</p><div class="listSimple" id="foodResults">${shown.map(f=>`<button data-act="openFood" data-id="${f.id}">${esc(f.name)}<br>${money(f.price)} - ${f.qty>0?`${f.qty} available`:'SOLD OUT'}</button>`).join('')||'<div class="empty">No food items found</div>'}</div></div>`}
-function filteredFoods(){return seedFoods.filter(f=>f.rid===S.selectedRid&&f.name.toLowerCase().includes(S.foodSearch.toLowerCase())&&(S.foodCategory==='All categories'||f.category===S.foodCategory)&&(S.foodPrice==='All prices'||(S.foodPrice==='Under $5'&&f.price<5)||(S.foodPrice==='$5 to $10'&&f.price>=5&&f.price<=10)||(S.foodPrice==='Over $10'&&f.price>10)))}
+function restaurantScreen(){let r=getRestaurant(S.selectedRid),foods=D.foods.filter(f=>f.rid===r.id&&f.active&&f.qty>0);let cats=['All categories',...new Set(foods.map(f=>f.category))];let shown=filteredFoods();return `<div class="content" style="padding:21px 20px 28px"><div class="row"><button class="back" data-act="back" aria-label="Back">${ico('back')}</button><div><h2 class="pageTitle" style="font-size:20px">${esc(r.name)}</h2><span class="sub">${esc(r.city+' - '+r.address)}</span></div></div><div class="mt28" style="margin-left:16px;margin-right:16px">${searchField('foodSearch','Search food by name',S.foodSearch)}</div><h3 class="heading">Filters</h3><div class="filter3"><select class="selinp" id="foodCat" aria-label="Food category">${cats.map(c=>`<option ${S.foodCategory===c?'selected':''}>${esc(c)}</option>`).join('')}</select><select class="selinp" id="foodPrice" aria-label="Food price">${['All prices','Under $5','$5 to $10','Over $10'].map(x=>`<option ${x===S.foodPrice?'selected':''}>${esc(x)}</option>`).join('')}</select><select class="selinp" disabled aria-label="Dietary filter not implemented"><option>Dietary</option></select></div><h3 class="heading">Available Food</h3><p class="sub" id="foodCount">${shown.length?shown.length+' food items found':'No food items found'}</p><div class="listSimple" id="foodResults">${shown.map(f=>`<button data-act="openFood" data-id="${f.id}">${esc(f.name)}<br>${money(f.price)} - ${f.qty>0?`${f.qty} available`:'SOLD OUT'}</button>`).join('')||'<div class="empty">No food items found</div>'}</div></div>`}
 function foodScreen(){let f=getFood(S.selectedFood),r=getRestaurant(f.rid);return `<div class="content">${headerBack('Food Details')}<h3 style="font-size:20px;margin:10px 0 0">${esc(f.name)}</h3><h3 class="heading">Description</h3><div class="card"><div class="sub">${esc(f.description)}</div></div><div class="summaryRow mt28"><span>Original Price</span><span class="priceOld">${money(f.orig)}</span></div><div class="summaryRow"><strong>Discounted Price</strong><strong style="font-size:20px">${money(f.price)}</strong></div><div class="summaryRow"><span>Available Quantity</span><span>${f.qty>0?f.qty+' available':'SOLD OUT'}</span></div><h3 class="heading">Restaurant Information</h3><div class="card"><strong>${esc(r.name)}</strong><div class="sub mt10">${esc(r.city)}</div></div><h3 class="heading">Select Quantity</h3><div class="counter">${btn('−','decreaseQty',{outline:true,disabled:f.qty===0||S.qty<=1})}<span class="countval">${f.qty===0?0:S.qty}</span>${btn('+','increaseQty',{outline:true,disabled:f.qty===0||S.qty>=f.qty})}</div><div class="mt36">${btn('Add to Order','addCart',{disabled:f.qty===0})}</div></div>`}
-function checkout(){let r=S.cart.length?getRestaurant(getFood(S.cart[0].id).rid):null;return `<div class="content">${headerBack('Your Order')}<div class="strong">${esc(r?.name||'No restaurant selected')}</div><h3 class="heading">Selected Items</h3><div id="checkoutItems">${S.cart.length?S.cart.map(c=>{let f=getFood(c.id);return `<div class="orderItem"><div class="spread"><strong>${esc(f.name)}</strong><strong class="green">${money(f.price*c.qty)}</strong></div><div class="sub mt10">Quantity: ${c.qty} (${money(f.price)} each)</div><div class="btnrow mt14">${btn('−','cartMinus',{outline:true,slim:true,disabled:c.qty<=1})}${btn('+','cartPlus',{outline:true,slim:true,disabled:c.qty>=f.qty})}${btn('Remove','cartRemove',{outline:true,slim:true})}</div><input type="hidden" class="cartItemId" value="${c.id}"/></div>`}).join(''):'<div class="empty">Your cart is empty.</div>'}</div><h3 class="heading">Pickup or Delivery</h3><div class="row" style="gap:25px"><label class="radioLine"><input type="radio" name="fulfillment" value="Pickup" ${S.fulfillment==='Pickup'?'checked':''}/>Pickup</label><label class="radioLine"><input type="radio" name="fulfillment" value="Delivery" ${S.fulfillment==='Delivery'?'checked':''}/>Delivery</label></div><div class="hline"></div><div class="summaryRow"><strong>Total Amount</strong><strong style="font-size:21px">${money(subtotal())}</strong></div><div class="mt28">${btn('Confirm Order','confirmOrder',{disabled:!S.cart.length})}</div><div class="mt10">${btn('Back to Food List','backToFoods',{outline:true})}</div></div>`}
-function statusScreen(){let o=S.orders.find(x=>x.id===S.selectedOrder)||recentCustomerOrder();return `<div class="content" style="padding:20px">${headerBack('Order Status / Details')}<div class="card">${o?`<div class="strong">Order ID: #${o.id}</div><div class="sub mt10">Restaurant: ${esc(getRestaurant(o.rid).name)}</div><div class="sub mt10">Order Type: ${esc(o.type)}</div><div class="sub mt10">Order Date: ${esc(o.date)}</div>`:'<strong>Order not found</strong>'}</div><h3 class="heading">Order Items</h3><div class="card sub">${o?o.items.map(it=>{let f=getFood(it.id);return `${esc(f.name)}<br>Quantity: ${it.qty} &nbsp;|&nbsp; ${money(f.price)} each<br>Subtotal: ${money(f.price*it.qty)}`}).join('<hr style="border:0;border-top:1px solid #ddd;margin:12px 0">'):'No order items available'}</div><div class="summaryRow mt20"><strong>Total Amount</strong><strong>${money(o?.total||0)}</strong></div><h3 class="heading">Current Status</h3><div class="chip" style="display:flex;padding:14px">${esc(o?.status||'Not available')}</div><h3 class="heading">Pickup / Delivery Reminder</h3><div class="card sub">${o?'Your order is pending restaurant approval. No reminders have been received yet.':'No reminders available'}</div><div class="mt28">${btn('Cancel Order (if allowed)','',{outline:true,disabled:true})}</div><div class="mt10">${btn('View Order History','',{outline:true,route:'history'})}</div></div>`}
-function historyScreen(){return `<div class="content" style="padding:20px">${headerBack('Order History')}<h3 class="heading">Previous Orders</h3><div class="sub">${S.orders.length} orders</div>${S.orders.length?`<div class="listSimple mt14">${[...S.orders].reverse().map(o=>`<button data-act="openOrder" data-id="${o.id}">Order #${o.id}<br>${esc(getRestaurant(o.rid).name)}<br>Date: ${esc(o.date)}<br>Status: ${esc(o.status)}<br>Total: ${money(o.total)}</button>`).join('')}</div>`:'<div class="empty">No previous orders found.</div>'}</div>`}
+function checkout(){let r=S.cart.length?getRestaurant(getFood(S.cart[0].id).rid):null;return `<div class="content">${headerBack('Your Order')}<div class="strong">${esc(r?.name||'No restaurant selected')}</div><h3 class="heading">Selected Items</h3><div id="checkoutItems">${S.cart.length?S.cart.map(c=>{let f=getFood(c.id);return `<div class="orderItem"><div class="spread"><strong>${esc(f.name)}</strong><strong class="green">${money(c.price*c.qty)}</strong></div><div class="sub mt10">Quantity: ${c.qty} (${money(c.price)} each)</div><div class="btnrow mt14">${btn('−','cartMinus',{outline:true,slim:true,disabled:c.qty<=1})}${btn('+','cartPlus',{outline:true,slim:true,disabled:c.qty>=f.qty})}${btn('Remove','cartRemove',{outline:true,slim:true})}</div><input type="hidden" class="cartItemId" value="${c.id}"/></div>`}).join(''):'<div class="empty">Your cart is empty.</div>'}</div><h3 class="heading">Pickup or Delivery</h3><div class="row" style="gap:25px"><label class="radioLine"><input type="radio" name="fulfillment" value="Pickup" ${S.fulfillment==='Pickup'?'checked':''}/>Pickup</label><label class="radioLine"><input type="radio" name="fulfillment" value="Delivery" ${S.fulfillment==='Delivery'?'checked':''}/>Delivery</label></div><div class="hline"></div><div class="summaryRow"><strong>Total Amount</strong><strong style="font-size:21px">${money(subtotal())}</strong></div><div class="mt28">${btn('Confirm Order','confirmOrder',{disabled:!S.cart.length})}</div><div class="mt10">${btn('Back to Food List','backToFoods',{outline:true})}</div></div>`}
 function managerHeader(){return topBrand(true)}
-function managerHome(){let recent=S.managerOrders.find(o=>['Pending','Accepted','Ready'].includes(o.status));let f=S.managerFoods.find(x=>x.active);let active=S.managerFoods.filter(f=>f.active);return `${managerHeader()}<div class="mgrContent"><h2 class="pageTitle">Hi, Manager</h2><div class="sub">Manage your food and customer orders</div><div class="stat3 mt20"><div class="statBox"><strong>${active.length}</strong><span>Food items</span></div><div class="statBox"><strong>${S.managerOrders.filter(o=>o.status==='Pending').length}</strong><span>Pending</span></div><div class="statBox"><strong>${S.managerOrders.filter(o=>o.status==='Ready').length}</strong><span>Ready</span></div></div><h3 class="heading">New orders</h3><div class="card"><strong>${recent?'Order #'+recent.id+' · '+recent.customer:'Orders not loaded yet'}</strong><div class="sub mt10">${recent?`${recent.status} · ${recent.type} · ${money(recent.qty*recent.price)}`:'Demo data will be added later'}</div><div class="mt14">${btn('Review orders','',{route:'morders',outline:true})}</div></div><h3 class="heading">Quick access</h3><div class="btnrow">${btn('+ Add food item','',{route:'editfood',slim:true})}${btn('Order history','',{route:'mhistory',outline:true,slim:true})}</div><h3 class="heading">Existing foods</h3><div class="card sub">${f?`${esc(f.name)} · ${f.qty} left · ${money(f.price)}`:'Food items not loaded yet'}</div><div class="mt14">${btn('Manage inventory','',{route:'inventory',outline:true})}</div><p class="tiny mt14">Demo screen — sample values are not saved to the database.</p></div>`}
-function filteredInventory(){let arr=S.managerFoods.filter(f=>f.active&&f.name.toLowerCase().includes(S.inventorySearch.toLowerCase())&&(S.inventoryCategory==='All categories'||f.category===S.inventoryCategory)&&(!S.inventoryDate||f.date===S.inventoryDate));return arr}
-function inventory(){let f=filteredInventory();let cats=['All categories',...new Set(S.managerFoods.map(x=>x.category))];return `${managerHeader()}<div class="mgrContent"><h2 class="pageTitle">My Food Items</h2><p class="sub">Search, update, or remove available food</p><div class="mt20">${btn('+ Add Food Item','',{route:'editfood'})}</div><div class="fieldGroup"><label>Food name</label><input class="inp" id="invSearch" placeholder="Search food items" value="${esc(S.inventorySearch)}" /></div><div class="fieldCols"><div class="fieldGroup"><label>Category</label><select class="selinp" id="invCat">${cats.map(c=>`<option ${c===S.inventoryCategory?'selected':''}>${esc(c)}</option>`).join('')}</select></div><div class="fieldGroup"><label>Available date</label><input class="inp" id="invDate" placeholder="YYYY-MM-DD" value="${esc(S.inventoryDate)}" /></div></div><div class="btnrow mt14">${btn('Apply filters','inventoryApply',{slim:true})}${btn('Clear','inventoryClear',{outline:true,slim:true})}</div><h3 class="heading">Food inventory</h3><p class="sub">${f.length} listing(s) found</p>${f.length?`<div class="listSimple">${f.map(x=>`<button data-act="editFood" data-id="${x.id}">${esc(x.name)}<br>${money(x.price)} · Qty ${x.qty} · ${esc(x.category)}<br><span class="tiny">${esc(x.date)} · Tap to edit</span></button>`).join('')}</div>`:'<div class="empty">No food items match these filters.</div>'}<p class="tiny mt14">Changes stay in prototype memory only; not SQLite.</p></div>`}
-function editfood(){let f=S.managerFoods.find(x=>x.id===S.managerFoodId),editing=!!f,inp=(label,key,hint,type='text',val='')=>`<div class="fieldGroup"><label>${label}</label><input class="inp" name="${key}" placeholder="${esc(hint)}" value="${esc(val)}" type="${type}" required /></div>`;return `${managerHeader()}<div class="mgrContent"><div class="row"><button class="back" data-act="back">${ico('back')}</button><b>SaveFood</b></div><h2 class="pageTitle mt20">${editing?'Edit Food Item':'Add Food Item'}</h2><p class="sub">Enter food details and availability</p><form data-form="editFood" class="mt20">${inp('Food name','name','Example: Vegetable Sandwich','text',f?.name)}<div class="fieldGroup"><label>Description</label><textarea class="textarea" name="description" placeholder="Describe the available food" required>${esc(f?.description)}</textarea></div><div class="fieldGroup"><label>Category</label><select name="category" class="selinp">${['Sandwiches','Salads','Bakery','Meals','Snacks','Drinks','Desserts','Wraps'].map(c=>`<option ${f?.category===c?'selected':''}>${c}</option>`).join('')}</select></div>${inp('Original price ($)','orig','Original price ($)','number',f?.orig??'')}${inp('Discounted price ($)','price','Discounted price ($)','number',f?.price??'')}${inp('Available quantity','qty','Available quantity','number',f?.qty??'')}${inp('Available date','date','YYYY-MM-DD','text',f?.date??new Date().toISOString().slice(0,10))}${inp('Available time','time','HH:MM (24-hour)','text',f?.time??'18:00')}<div class="mt20">${btn(editing?'Save Changes':'Save Food Item')}</div></form><div class="mt10">${btn('Cancel','',{route:'inventory',outline:true})}</div>${editing?`<div class="mt14">${btn(f.active?'Remove listing':'Restore listing','toggleFoodActive',{outline:true})}</div>`:''}<p class="tiny mt14">Demo only: changes are kept in memory, not SQLite.</p></div>`}
-function morders(){let active=S.managerOrders.filter(o=>['Pending','Accepted','Ready'].includes(o.status));let shown=active.filter(o=>S.managerFilter==='All active orders'||o.status===S.managerFilter);return `${managerHeader()}<div class="mgrContent"><h2 class="pageTitle">Customer Orders</h2><p class="sub">Review incoming and active food orders</p><div class="fieldCols mt20"><div class="statBox"><strong>${S.managerOrders.filter(o=>o.status==='Pending').length}</strong><span>Pending</span></div><div class="statBox"><strong>${active.length}</strong><span>Active orders</span></div></div><div class="fieldGroup"><label>Filter by order status</label><select class="selinp" id="mgrOrderFilter">${['All active orders','Pending','Accepted','Ready'].map(o=>`<option ${o===S.managerFilter?'selected':''}>${o}</option>`).join('')}</select></div><div class="mt14">${btn('View order history','',{route:'mhistory',outline:true})}</div><h3 class="heading">Current orders</h3><p class="sub">${shown.length} order(s) found</p><div class="listSimple">${shown.map(o=>`<button data-act="openMgrOrder" data-id="${o.id}">Order #${o.id} · ${esc(o.customer)}<br>${esc(o.status)} · ${esc(o.type)} · ${money(o.qty*o.price)}<br><span class="tiny">${esc(o.date)}</span></button>`).join('')||'<div class="empty">No active orders match this filter.</div>'}</div><p class="tiny mt14">Demo orders — not saved in SQLite or linked to Customer checkout yet.</p></div>`}
-function mdetails(){let o=S.managerOrders.find(z=>z.id===S.selectedManagerOrder);if(!o)return `<div class="content">${headerBack('Order Details')}<p>Order not found</p></div>`;let status=o.status;return `${managerHeader()}<div class="mgrContent"><h2 class="pageTitle">Order Details</h2><p class="sub">Review and manage this customer order</p><div class="mt20">${btn('Back to orders','',{route:'morders',outline:true,slim:true})}</div><div class="card mt20"><strong>Order #${o.id}</strong><div class="sub mt10">Customer: ${esc(o.customer)}</div><div class="sub mt10">Order date: ${esc(o.date)}</div><div class="sub mt10">Fulfillment: ${esc(o.type)}</div><div class="sub mt10">Status: ${esc(status)}</div></div><h3 class="heading">Food items</h3><div class="card sub">${esc(o.food)} x ${o.qty} · ${money(o.qty*o.price)}</div><div class="summaryRow"><strong>Total</strong><strong>${money(o.qty*o.price)}</strong></div><h3 class="heading">Manage order</h3><div class="card"><div class="sub">${status==='Pending'?'Choose Accept or Reject.':status==='Accepted'?'The order is accepted. Mark it Ready when prepared.':status==='Ready'?'The order is Ready. Create a reminder or complete the order.':'This order has reached a final status.'}</div><div class="mt14">${status==='Pending'?`<div class="btnrow">${btn('Accept order','acceptMgr',{slim:true})}${btn('Reject order','rejectMgr',{outline:true,slim:true})}</div>`:status==='Accepted'?btn('Mark as Ready','readyMgr'):status==='Ready'?btn(o.type==='Pickup'?'Mark as Picked Up':'Mark as Delivered','finishMgr'):''}</div></div><h3 class="heading">Pickup / delivery reminder</h3><div class="card sub">${o.reminder?esc(o.reminder):status==='Ready'?'You can create one simulated reminder while this order is Ready.':'Reminder creation is available only for Ready orders.'}</div>${status==='Ready'&&!o.reminder?`<div class="mt10">${btn('Create reminder','reminderMgr',{outline:true})}</div>`:''}<p class="tiny mt14">Demo only: changes stay in memory. No customer notification or SQLite update.</p></div>`}
-function mhistory(){let a=S.managerOrders.filter(o=>!['Pending','Accepted','Ready'].includes(o.status));let shown=a.filter(o=>S.historyFilter==='All history'||(S.historyFilter==='Completed'&&['Picked Up','Delivered'].includes(o.status))||o.status===S.historyFilter);return `${managerHeader()}<div class="mgrContent"><h2 class="pageTitle">Order History</h2><p class="sub">Review completed and rejected orders</p><div class="fieldCols mt20"><div class="statBox"><strong>${a.filter(o=>['Picked Up','Delivered'].includes(o.status)).length}</strong><span>Completed</span></div><div class="statBox"><strong>${a.filter(o=>o.status==='Rejected').length}</strong><span>Rejected</span></div></div><div class="fieldGroup"><label>Filter order history</label><select class="selinp" id="mgrHistoryFilter">${['All history','Completed','Rejected'].map(o=>`<option ${o===S.historyFilter?'selected':''}>${o}</option>`).join('')}</select></div><div class="mt14">${btn('View active orders','',{route:'morders',outline:true})}</div><h3 class="heading">Past orders</h3><div class="sub">${shown.length} order(s) found</div><div class="listSimple mt14">${shown.map(o=>`<button data-act="openMgrOrder" data-id="${o.id}">Order #${o.id} · ${esc(o.customer)}<br>${o.status} · ${o.type} · ${money(o.qty*o.price)}</button>`).join('')||'<div class="empty">No past orders match this filter.</div>'}</div><p class="tiny mt14">Demo history resets when the app process stops; not SQLite.</p></div>`}
+function editfood(){let f=managerFoods().find(x=>x.id===S.managerFoodId),editing=!!f,inp=(label,key,hint,type='text',val='')=>`<div class="fieldGroup"><label>${label}</label><input class="inp" name="${key}" placeholder="${esc(hint)}" value="${esc(val)}" type="${type}" ${type==='number'?`step="${key==='qty'?'1':'0.01'}" min="0"`:''} required /></div>`;return `${managerHeader()}<div class="mgrContent"><div class="row"><button class="back" data-act="back">${ico('back')}</button><b>SaveFood</b></div><h2 class="pageTitle mt20">${editing?'Edit Food Item':'Add Food Item'}</h2><p class="sub">Enter food details and availability</p><form data-form="editFood" class="mt20">${inp('Food name','name','Example: Vegetable Sandwich','text',f?.name)}<div class="fieldGroup"><label>Description</label><textarea class="textarea" name="description" placeholder="Describe the available food" required>${esc(f?.description)}</textarea></div><div class="fieldGroup"><label>Category</label><select name="category" class="selinp">${['Sandwiches','Salads','Bakery','Meals','Wraps','Other'].map(c=>`<option ${f?.category===c?'selected':''}>${c}</option>`).join('')}</select></div>${inp('Original price ($)','orig','Original price ($)','number',f?.orig??'')}${inp('Discounted price ($)','price','Discounted price ($)','number',f?.price??'')}${inp('Available quantity','qty','Available quantity','number',f?.qty??'')}${inp('Available date','date','YYYY-MM-DD','text',f?.date??new Date().toISOString().slice(0,10))}${inp('Available time','time','HH:MM (24-hour)','text',f?.time??'18:00')}<div class="mt20">${btn(editing?'Save Changes':'Save Food Item')}</div></form><div class="mt10">${btn('Cancel','',{route:'inventory',outline:true})}</div>${editing?`<div class="mt14">${btn(f.active?'Remove listing':'Restore listing','toggleFoodActive',{outline:true})}</div>`:''}<p class="tiny mt14">Listing changes appear in customer searches.</p></div>`}
 function components(){return `<div class="content">${headerBack('Reusable XML Gallery')}<p class="sub">These are design-time item XMLs. The actual Customer restaurant and food lists currently use Android's simple text adapters.</p><h3 class="heading">item_customer_restaurant.xml</h3><div class="card"><div class="row"><span class="logoCircle" style="width:68px;height:68px;border-radius:10px">${ico('store')}</span><div><strong>Green Bowl Café</strong><div class="sub">Burnaby</div><span class="green tiny">8 discounted items</span></div></div><div class="mt10">${btn('View Restaurant','',{outline:true,slim:true,disabled:true})}</div></div><h3 class="heading">item_customer_food.xml</h3><div class="card"><div class="row"><span class="logoCircle" style="width:65px;height:65px;border-radius:10px">${ico('food')}</span><div><strong>Pizza Slice</strong><div class="sub">Available until 8:00 PM</div><div class="green">$4.00 <span class="priceOld">$8.00</span></div><div class="tiny">Quantity: 5 available</div></div></div></div><h3 class="heading">item_customer_checkout.xml</h3><div class="card"><div class="spread"><strong>Pizza Slice</strong><strong class="green">$4.00</strong></div><div class="sub mt10">Quantity: 1</div></div><h3 class="heading">item_customer_order_history.xml</h3><div class="card"><strong>Order #105</strong><p class="sub">Green Bowl Café · Nov 9, 2026</p><span class="chip">Picked Up</span></div><h3 class="heading">item_manager_order.xml</h3><div class="card">Order #2101 · Alex Chen<br><span class="sub">Pending · Pickup · $8.50</span></div></div>`}
 function legacy(){return `<div class="content" style="height:100%;display:grid;place-items:center"><span>Hello World!</span></div>`}
-function render(){let map={welcome,login,register,profile,home,restaurants:restaurantsScreen,restaurant:restaurantScreen,food:foodScreen,checkout,status:statusScreen,history:historyScreen,mhome:managerHome,inventory,editfood,morders,mdetails,mhistory,components,legacy};document.getElementById('screen').innerHTML=map[S.screen]();document.getElementById('navMount').innerHTML=nav();document.getElementById('outerTitle').textContent=names[S.screen];let sc=document.getElementById('screen');sc.scrollTop=0;let picker=document.getElementById('screenPicker');picker.value=S.screen;document.querySelectorAll('.navChoice').forEach(n=>n.classList.toggle('active',n.dataset.route===S.screen));}
 function initNav(){let sidebar=document.getElementById('sidebar'),picker=document.getElementById('screenPicker');sidebar.innerHTML=sections.map(([label,ids])=>`<h2>${label}</h2><div class="listnav">${ids.map((id,i)=>`<button class="navChoice" data-route="${id}"><span>${String(i+1).padStart(2,'0')}</span>${names[id]}</button>`).join('')}</div>`).join('');picker.innerHTML=sections.map(([label,ids])=>`<optgroup label="${label}">${ids.map(id=>`<option value="${id}">${names[id]}</option>`).join('')}</optgroup>`).join('');document.getElementById('sideLogo').innerHTML=ico('leaf')}
 function recalcRestaurant(){let a=filteredRestaurants();let list=document.getElementById('restaurantResults');if(list){list.innerHTML=a.map(r=>`<button data-act="openRestaurant" data-id="${r.id}">${esc(r.name)} - ${esc(r.city)}</button>`).join('')||'<div class="empty">No restaurants found</div>';document.getElementById('restaurantCount').textContent=a.length?a.length+' restaurants found':'No restaurants found';}}
 function recalcFoods(){let a=filteredFoods();let list=document.getElementById('foodResults');if(list){list.innerHTML=a.map(f=>`<button data-act="openFood" data-id="${f.id}">${esc(f.name)}<br>${money(f.price)} - ${f.qty>0?`${f.qty} available`:'SOLD OUT'}</button>`).join('')||'<div class="empty">No food items found</div>';document.getElementById('foodCount').textContent=a.length?a.length+' food items found':'No food items found';}}
-function handleAct(action,e){let t=e.target.closest('[data-act]')||e.target;let id=Number(t.dataset.id);switch(action){case 'guest':toast('Guest browsing is not ready yet');break;case 'forgot':toast('Password recovery is not ready yet');break;case 'back':back();break;case 'homeSearch':S.restaurantSearch=document.getElementById('customerCity').value.trim();goto('restaurants');break;case 'filterRestaurants':S.restaurantSearch=document.getElementById('restaurantCity').value.trim();recalcRestaurant();break;case 'openRestaurant':S.selectedRid=id;S.foodSearch='';S.foodCategory='All categories';S.foodPrice='All prices';goto('restaurant');break;case 'openFood':{let f=getFood(id);if(!f.qty){toast('This food is sold out');break;}S.selectedFood=id;S.qty=1;goto('food');break;}case 'decreaseQty':S.qty=Math.max(1,S.qty-1);render();break;case 'increaseQty':S.qty=Math.min(getFood(S.selectedFood).qty,S.qty+1);render();break;case 'addCart':{let f=getFood(S.selectedFood);if(!f.qty){toast('SOLD OUT');break;}if(S.cart.length&&getFood(S.cart[0].id).rid!==f.rid){toast('Your cart contains food from another restaurant');break;}let c=S.cart.find(z=>z.id===f.id);if(c){if(c.qty+S.qty>f.qty){toast('Maximum available quantity reached');break;}c.qty+=S.qty;}else S.cart.push({id:f.id,qty:S.qty});toast('Added to cart');goto('checkout');break;}case 'cartMinus':case 'cartPlus':case 'cartRemove':{let card=e.target.closest('.orderItem'),fid=Number(card?.querySelector('.cartItemId')?.value);let c=S.cart.find(z=>z.id===fid);if(!c)break;if(action==='cartRemove')S.cart=S.cart.filter(z=>z.id!==fid);else if(action==='cartMinus')c.qty=Math.max(1,c.qty-1);else c.qty=Math.min(getFood(fid).qty,c.qty+1);render();break;}case 'backToFoods':goto('restaurant',{selectedRid:S.cart.length?getFood(S.cart[0].id).rid:S.selectedRid});break;case 'confirmOrder':{if(!S.cart.length){toast('Your cart is empty');break;}let o={id:1001+S.orders.length,rid:getFood(S.cart[0].id).rid,type:S.fulfillment,status:'Pending',date:todayTime(),items:S.cart.map(c=>({...c})),total:subtotal()};S.orders.push(o);S.cart=[];S.selectedOrder=o.id;goto('status');toast('Order confirmed in prototype memory');break;}case 'viewLatest':{let x=recentCustomerOrder();if(!x){toast('You have no confirmed orders yet');break;}goto('status',{selectedOrder:x.id});break;}case 'openOrder':goto('status',{selectedOrder:id});break;case 'inventoryApply':S.inventorySearch=document.getElementById('invSearch').value;S.inventoryCategory=document.getElementById('invCat').value;S.inventoryDate=document.getElementById('invDate').value;render();break;case 'inventoryClear':S.inventorySearch='';S.inventoryCategory='All categories';S.inventoryDate='';render();break;case 'editFood':goto('editfood',{managerFoodId:id});break;case 'toggleFoodActive':{let f=S.managerFoods.find(f=>f.id===S.managerFoodId);if(f){f.active=!f.active;toast('Listing updated in prototype memory');}goto('inventory');break;}case 'openMgrOrder':goto('mdetails',{selectedManagerOrder:id});break;case 'acceptMgr':case 'rejectMgr':case 'readyMgr':case 'finishMgr':{let o=S.managerOrders.find(z=>z.id===S.selectedManagerOrder);if(!o)break;let target=action==='acceptMgr'?'Accepted':action==='rejectMgr'?'Rejected':action==='readyMgr'?'Ready':o.type==='Pickup'?'Picked Up':'Delivered';let ok=(o.status==='Pending'&&['Accepted','Rejected'].includes(target))||(o.status==='Accepted'&&target==='Ready')||(o.status==='Ready'&&['Picked Up','Delivered'].includes(target));if(!ok){toast('This status change is not allowed');break;}o.status=target;render();toast('Demo status updated: '+target);break;}case 'reminderMgr':{let o=S.managerOrders.find(z=>z.id===S.selectedManagerOrder);if(o?.status==='Ready'&&!o.reminder){o.reminder=`Demo reminder recorded at ${todayTime()}: Your SaveFood order #${o.id} is ready for ${o.type==='Pickup'?'pickup':'delivery'}.`;render();toast('Demo reminder saved. Nothing was sent to the customer.');}else toast('Reminder cannot be created for this order');break;}default:break;}}
-document.addEventListener('click',e=>{let route=e.target.closest('[data-route]');if(route){e.preventDefault();if(route.dataset.role)S.lastRole=route.dataset.role;if(route.dataset.route==='editfood')S.managerFoodId=null;goto(route.dataset.route);return;}let act=e.target.closest('[data-act]');if(act){e.preventDefault();handleAct(act.dataset.act,e)}});
-document.addEventListener('change',e=>{let t=e.target;if(t.dataset.show){if(t.dataset.show==='registerPasswords')document.querySelectorAll('input[name="password"],input[name="confirm"]').forEach(x=>x.type=t.checked?'text':'password');else{let input=document.getElementById(t.dataset.show);if(input)input.type=t.checked?'text':'password';}return;}if(t.name==='fulfillment'){S.fulfillment=t.value;return;}if(t.id==='foodCat'){S.foodCategory=t.value;recalcFoods()}if(t.id==='foodPrice'){S.foodPrice=t.value;recalcFoods()}if(t.id==='mgrOrderFilter'){S.managerFilter=t.value;render()}if(t.id==='mgrHistoryFilter'){S.historyFilter=t.value;render()}});
-document.addEventListener('input',e=>{if(e.target.id==='foodSearch'){S.foodSearch=e.target.value;recalcFoods()}if(e.target.id==='restaurantCity'){S.restaurantSearch=e.target.value;recalcRestaurant()}});
-document.addEventListener('submit',e=>{let f=e.target.closest('form[data-form]');if(!f)return;e.preventDefault();let x=new FormData(f);if(f.dataset.form==='login'){let email=String(x.get('email')||'').trim(),pw=String(x.get('password')||'');if(!email.includes('@')){toast('Please enter a valid email address');return;}if(pw!=='Demo123!'){toast('Invalid demo credentials');return;}if(email.toLowerCase()==='customer@savefood.test'){S.role='customer';goto('home');return;}if(email.toLowerCase()==='manager@savefood.test'){S.role='manager';goto('mhome');return;}toast('Invalid demo credentials');return;}if(f.dataset.form==='register'){if(x.get('password')!==x.get('confirm')){toast('Passwords do not match');return;}if(String(x.get('password')).length<8){toast('Use at least 8 characters');return;}toast('Form valid. Account not created yet: SQLite integration is pending.');return;}if(f.dataset.form==='profile'){toast('Please sign in before changing your profile');return;}if(f.dataset.form==='editFood'){let orig=Number(x.get('orig')),price=Number(x.get('price')),qty=Number(x.get('qty')),date=String(x.get('date')),time=String(x.get('time'));if(!(orig>0&&price>0&&price<orig&&Number.isInteger(qty)&&qty>=0)){toast('Enter valid prices and quantity');return;}if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)){toast('Use YYYY-MM-DD and HH:MM');return;}let old=S.managerFoods.find(f=>f.id===S.managerFoodId);let item={id:old?.id??(Math.max(506,...S.managerFoods.map(f=>f.id))+1),rid:101,name:String(x.get('name')),description:String(x.get('description')),category:String(x.get('category')),orig,price,qty,date,time,active:old?.active??true};if(old)Object.assign(old,item);else S.managerFoods.push(item);S.managerFoodId=null;goto('inventory');toast(old?'Food item updated (prototype only)':'Food item added (prototype only)');}});
-document.getElementById('screenPicker').addEventListener('change',e=>{if(e.target.value==='editfood')S.managerFoodId=null;goto(e.target.value)});
-document.getElementById('resetBtn').addEventListener('click',()=>{resetData();S.screen='welcome';render();toast('Prototype reset to starting demo data')});document.getElementById('homeBtn').addEventListener('click',()=>{goto('welcome')});document.getElementById('expandBtn').addEventListener('click',()=>{document.body.classList.toggle('expView');document.getElementById('expandBtn').textContent=document.body.classList.contains('expView')?'⊡ Exit':'⤢ View'});
-initNav();render();
+function profile() {
+  const u=currentUser();
+  return `<div class="content p32 stdForm">${headerBack('')}<div style="display:flex;justify-content:center">${logo('medium')}</div>
+    <h2 class="center" style="font-size:26px;margin:15px 0 6px">My Profile</h2>
+    <div class="center strong" style="font-size:18px">${esc(u?.name||'No active account')}</div>
+    <div class="sub center mt6">${esc(u?.email||'Sign in to view your account details')}</div>
+    <div class="center green mt6" style="font-size:14px">${u?(u.role==='manager'?'Restaurant Manager':'Customer'):'Not signed in'}</div>
+    <p class="sub center mt20">${u?'View and update your personal information.':'Please sign in to view and update your profile.'}</p>
+    <h3 class="heading mt28">Personal Information</h3><form data-form="profile">
+    ${[['Full Name','name','Your full name'],['Phone Number','phone','Your phone number'],['Address','address','Your address']].map(([l,n,h])=>`<div class="fieldGroup"><label for="profile-${n}">${l}</label><input id="profile-${n}" name="${n}" class="inp" placeholder="${h}" value="${esc(u?.[n]||'')}" required ${u?'':'disabled'}/></div>`).join('')}
+    <div class="mt28">${btn('Save Changes','',{disabled:!u})}</div></form>
+    <div class="mt10">${btn(u?'Log Out':'Back to Welcome','logout',{soft:true})}</div></div>`;
+}
+function orderLines(o) {
+  return o.items.map(it=>`<div>${esc(it.name)}<br>Quantity: ${it.qty} &nbsp;|&nbsp; ${money(it.price)} each<br>Subtotal: ${money(it.price*it.qty)}</div>`).join('<hr style="border:0;border-top:1px solid #ddd;margin:12px 0">');
+}
+function statusScreen() {
+  const o=selectedCustomerOrder();
+  return `<div class="content" style="padding:20px">${headerBack('Order Status / Details')}
+    <div class="card">${o?`<div class="strong">Order ID: #${o.id}</div><div class="sub mt10">Restaurant: ${esc(getRestaurant(o.rid).name)}</div><div class="sub mt10">Order Type: ${esc(o.type)}</div><div class="sub mt10">Order Date: ${esc(o.date)}</div>`:'<strong>Order not found</strong>'}</div>
+    <h3 class="heading">Order Items</h3><div class="card sub">${o?orderLines(o):'No order items available'}</div>
+    <div class="summaryRow mt20"><strong>Total Amount</strong><strong>${money(o?.total||0)}</strong></div>
+    <h3 class="heading">Current Status</h3><div class="chip" style="display:flex;padding:14px">${esc(o?.status||'Not available')}</div>
+    <h3 class="heading">Pickup / Delivery Reminder</h3><div class="card sub">${o?.reminder?esc(o.reminder.date+'  '+o.reminder.message):'No reminders have been received yet.'}</div>
+    <div class="mt28">${btn('Cancel Order (if allowed)','cancelOrder',{outline:true,disabled:o?.status!=='Pending'})}</div>
+    <div class="mt10">${btn('View Order History','',{outline:true,route:'history'})}</div></div>`;
+}
+function historyScreen() {
+  const orders=customerOrders();
+  return `<div class="content" style="padding:20px">${headerBack('Order History')}<h3 class="heading">Previous Orders</h3><div class="sub">${orders.length} orders</div>
+    ${orders.length?`<div class="listSimple mt14">${[...orders].reverse().map(o=>`<button data-act="openOrder" data-id="${o.id}">Order #${o.id}<br>${esc(getRestaurant(o.rid).name)}<br>Date: ${esc(o.date)}<br>Status: ${esc(o.status)}<br>Total: ${money(o.total)}</button>`).join('')}</div>`:'<div class="empty">No previous orders found.</div>'}</div>`;
+}
+function restaurantSetup() {
+  return `<div class="modalShade"><section class="modalCard" role="dialog" aria-modal="true" aria-labelledby="restaurantSetupTitle"><h3 id="restaurantSetupTitle">Set up your restaurant</h3><form data-form="restaurant">
+    ${[['Restaurant name','name'],['City','city'],['Street address','address']].map(([label,key])=>`<div class="fieldGroup"><label for="setup-${key}">${label}</label><input id="setup-${key}" name="${key}" class="inp" placeholder="${label}" required/></div>`).join('')}
+    <div class="mt20">${btn('Save')}</div></form><div class="mt10">${btn('Later','laterSetup',{outline:true})}</div></section></div>`;
+}
+function managerHome() {
+  const orders=managerOrders(),foods=managerFoods(),active=foods.filter(f=>f.active),recent=[...orders].reverse().find(isOpen),f=active[0],r=managerRestaurant();
+  return `${managerHeader()}<div class="mgrContent"><h2 class="pageTitle">Hi, Manager</h2><div class="sub">Manage your food and customer orders</div>
+    <div class="stat3 mt20"><div class="statBox"><strong>${active.length}</strong><span>Food items</span></div><div class="statBox"><strong>${orders.filter(o=>o.status==='Pending').length}</strong><span>Pending</span></div><div class="statBox"><strong>${orders.filter(o=>o.status==='Ready').length}</strong><span>Ready</span></div></div>
+    <h3 class="heading">New orders</h3><div class="card"><strong>${recent?'Order #'+recent.id+' · '+esc(recent.customer):'No active orders'}</strong><div class="sub mt10">${recent?`${esc(recent.status)} · ${esc(recent.type)} · ${money(recent.total)}`:''}</div><div class="mt14">${btn('Review orders','',{route:'morders',outline:true})}</div></div>
+    <h3 class="heading">Quick access</h3><div class="btnrow">${r?btn('+ Add food item','',{route:'editfood',slim:true}):btn('Set up restaurant','setupRestaurant',{slim:true})}${btn('Order history','',{route:'mhistory',outline:true,slim:true})}</div>
+    <h3 class="heading">Existing foods</h3><div class="card sub">${f?`${esc(f.name)} · ${f.qty} left · ${money(f.price)}`:'No active food items'}</div>
+    <div class="mt14">${btn('Manage inventory','',{route:'inventory',outline:true})}</div><p class="tiny mt14">Manage inventory and customer orders for your restaurant.</p></div>${S.setupOpen&&!r?restaurantSetup():''}`;
+}
+function inventory() {
+  const foods=managerFoods(),shown=filteredInventory(),cats=['All categories',...new Set(foods.map(f=>f.category))];
+  return `${managerHeader()}<div class="mgrContent"><h2 class="pageTitle">My Food Items</h2><p class="sub">Search, update, or remove available food</p>
+    <div class="mt20">${managerRestaurant()?btn('+ Add Food Item','',{route:'editfood'}):btn('Set up restaurant','setupRestaurant')}</div>
+    <div class="fieldGroup"><label for="invSearch">Food name</label><input class="inp" id="invSearch" placeholder="Search food items" value="${esc(S.inventorySearch)}"/></div>
+    <div class="fieldCols"><div class="fieldGroup"><label for="invCat">Category</label><select class="selinp" id="invCat">${cats.map(c=>`<option ${c===S.inventoryCategory?'selected':''}>${esc(c)}</option>`).join('')}</select></div>
+    <div class="fieldGroup"><label for="invDate">Available date</label><input class="inp" id="invDate" placeholder="YYYY-MM-DD" value="${esc(S.inventoryDate)}"/></div></div>
+    <div class="btnrow mt14">${btn('Apply filters','inventoryApply',{slim:true})}${btn('Clear','inventoryClear',{outline:true,slim:true})}</div>
+    <h3 class="heading">Food inventory</h3><p class="sub">${shown.length} listing(s) found</p>
+    ${shown.length?`<div class="listSimple">${shown.map(f=>`<button data-act="editFood" data-id="${f.id}">${esc(f.name)}<br>${money(f.price)} · Qty ${f.qty} · ${esc(f.category)}<br><span class="tiny">${esc(f.date)} · ${f.active?'Active':'Removed'} · Tap to edit</span></button>`).join('')}</div>`:'<div class="empty">No food items match these filters.</div>'}
+    <p class="tiny mt14">Removed listings stay in inventory and can be restored.</p></div>`;
+}
+function morders() {
+  const orders=managerOrders(),active=orders.filter(isOpen),shown=[...active].reverse().filter(o=>S.managerFilter==='All active orders'||o.status===S.managerFilter);
+  return `${managerHeader()}<div class="mgrContent"><h2 class="pageTitle">Customer Orders</h2><p class="sub">Review incoming and active food orders</p>
+    <div class="fieldCols mt20"><div class="statBox"><strong>${orders.filter(o=>o.status==='Pending').length}</strong><span>Pending</span></div><div class="statBox"><strong>${active.length}</strong><span>Active orders</span></div></div>
+    <div class="fieldGroup"><label for="mgrOrderFilter">Filter by order status</label><select class="selinp" id="mgrOrderFilter">${['All active orders','Pending','Accepted','Ready'].map(v=>`<option ${v===S.managerFilter?'selected':''}>${v}</option>`).join('')}</select></div>
+    <div class="mt14">${btn('View order history','',{route:'mhistory',outline:true})}</div><h3 class="heading">Current orders</h3><p class="sub">${shown.length} order(s) found</p>
+    <div class="listSimple">${shown.map(o=>`<button data-act="openMgrOrder" data-id="${o.id}">Order #${o.id} · ${esc(o.customer)}<br>${esc(o.status)} · ${esc(o.type)} · ${money(o.total)}<br><span class="tiny">${esc(o.date)}</span></button>`).join('')||'<div class="empty">No active orders match this filter.</div>'}</div>
+    <p class="tiny mt14">Customer checkout and manager orders share the same records.</p></div>`;
+}
+function mdetails() {
+  const o=selectedManagerOrder();
+  if (!o) return `${managerHeader()}<div class="mgrContent">${headerBack('Order Details')}<p>Order not found</p>${btn('Back to orders','',{route:'morders',outline:true})}</div>`;
+  const status=o.status;
+  return `${managerHeader()}<div class="mgrContent"><h2 class="pageTitle">Order Details</h2><p class="sub">Review and manage this customer order</p>
+    <div class="mt20">${btn('Back to orders','',{route:'morders',outline:true,slim:true})}</div>
+    <div class="card mt20"><strong>Order #${o.id}</strong><div class="sub mt10">Customer: ${esc(o.customer)}</div><div class="sub mt10">Order date: ${esc(o.date)}</div><div class="sub mt10">Fulfillment: ${esc(o.type)}</div><div class="sub mt10">Status: ${esc(status)}</div></div>
+    <h3 class="heading">Food items</h3><div class="card sub">${orderLines(o)}</div><div class="summaryRow"><strong>Total</strong><strong>${money(o.total)}</strong></div>
+    <h3 class="heading">Manage order</h3><div class="card"><div class="sub">${status==='Pending'?'Choose Accept or Reject.':status==='Accepted'?'The order is accepted. Mark it Ready when prepared.':status==='Ready'?'The order is Ready. Create a reminder or complete the order.':'This order has reached a final status.'}</div>
+    <div class="mt14">${status==='Pending'?`<div class="btnrow">${btn('Accept order','acceptMgr',{slim:true})}${btn('Reject order','rejectMgr',{outline:true,slim:true})}</div>`:status==='Accepted'?btn('Mark as Ready','readyMgr'):status==='Ready'?btn(o.type==='Pickup'?'Mark as Picked Up':'Mark as Delivered','finishMgr'):''}</div></div>
+    <h3 class="heading">Pickup / delivery reminder</h3><div class="card sub">${o.reminder?esc('Reminder recorded at '+o.reminder.date+': '+o.reminder.message):status==='Ready'?'You can send one reminder while this order is Ready.':'Reminder creation is available only for Ready orders.'}</div>
+    ${status==='Ready'&&!o.reminder?`<div class="mt10">${btn('Create reminder','reminderMgr',{outline:true})}</div>`:''}
+    <p class="tiny mt14">Customers can view status changes and reminders in Order Status.</p></div>`;
+}
+function mhistory() {
+  const history=managerOrders().filter(o=>!isOpen(o)),shown=[...history].reverse().filter(o=>S.historyFilter==='All history'||o.status===S.historyFilter);
+  return `${managerHeader()}<div class="mgrContent"><h2 class="pageTitle">Order History</h2><p class="sub">Review completed and rejected orders</p>
+    <div class="fieldCols mt20"><div class="statBox"><strong>${history.filter(o=>['Picked Up','Delivered'].includes(o.status)).length}</strong><span>Completed</span></div><div class="statBox"><strong>${history.filter(o=>o.status==='Rejected').length}</strong><span>Rejected</span></div></div>
+    <div class="fieldGroup"><label for="mgrHistoryFilter">Filter order history</label><select class="selinp" id="mgrHistoryFilter">${['All history','Rejected','Picked Up','Delivered'].map(v=>`<option ${v===S.historyFilter?'selected':''}>${v}</option>`).join('')}</select></div>
+    <div class="mt14">${btn('View active orders','',{route:'morders',outline:true})}</div><h3 class="heading">Past orders</h3><div class="sub">${shown.length} order(s) found</div>
+    <div class="listSimple mt14">${shown.map(o=>`<button data-act="openMgrOrder" data-id="${o.id}">Order #${o.id} · ${esc(o.customer)}<br>${esc(o.status)} · ${esc(o.type)} · ${money(o.total)}</button>`).join('')||'<div class="empty">No past orders match this filter.</div>'}</div>
+    <p class="tiny mt14">Completed, rejected and cancelled orders appear here.</p></div>`;
+}
+function showDialog(title,message,action,label='Confirm') {
+  const host=document.getElementById('dialogMount');
+  host.innerHTML=`<div class="modalShade"><section class="modalCard" role="dialog" aria-modal="true" aria-labelledby="confirm-title"><h3 id="confirm-title">${esc(title)}</h3><p class="sub">${esc(message)}</p><div class="btnrow mt20">${btn('Cancel','closeDialog',{outline:true})}${btn(label,action)}</div></section></div>`;
+}
+
+function render() {
+  const map={welcome,login,register,profile,home,restaurants:restaurantsScreen,restaurant:restaurantScreen,
+    food:foodScreen,checkout,status:statusScreen,history:historyScreen,mhome:managerHome,inventory,editfood,
+    morders,mdetails,mhistory,components,legacy};
+  document.getElementById('screen').innerHTML=map[S.screen]();
+  document.getElementById('navMount').innerHTML=nav();
+  document.getElementById('outerTitle').textContent=names[S.screen];
+  document.getElementById('screen').scrollTop=0;
+  document.getElementById('screenPicker').value=S.screen;
+  document.querySelectorAll('.navChoice').forEach(n=>n.classList.toggle('active',n.dataset.route===S.screen));
+  document.getElementById('switchBtn').textContent=currentUser()?'Switch account':'Demo login';
+  document.getElementById('sessionInfo').textContent=currentUser()?`Signed in: ${currentUser().name} · ${currentUser().role}`:'Not signed in';
+  document.getElementById('outerSubtitle').textContent='Database integration · updated 17 Nov 2026';
+  document.getElementById('persistenceInfo').textContent=storageWorks?'Changes and sign-in stay in this browser after refresh. The cart clears on refresh, as it does after an Android process restart.':'Storage unavailable: changes last only while this page stays open.';
+  if (S.screen==='login'&&S.loginRole) {
+    document.querySelector('#loginForm input[name="email"]').value=S.loginRole+'@savefood.test';
+  }
+}
+function handleAct(action,e) {
+  const t=e.target.closest('[data-act]')||e.target,id=Number(t.dataset.id);
+  try {
+    switch(action) {
+      case 'guest':toast('Guest browsing is not ready yet');break;
+      case 'forgot':toast('Password recovery is not ready yet');break;
+      case 'back':back();break;
+      case 'logout':logout();toast('Logged out');break;
+      case 'demoLogin':logout(true,t.dataset.role||'customer');break;
+      case 'homeSearch':S.city=document.getElementById('customerCity').value.trim();S.restaurantSearch=S.city;goto('restaurants');break;
+      case 'filterRestaurants':S.restaurantSearch=document.getElementById('restaurantCity').value.trim();recalcRestaurant();break;
+      case 'openRestaurant':S.selectedRid=id;S.foodSearch='';S.foodCategory='All categories';S.foodPrice='All prices';goto('restaurant');break;
+      case 'openFood': {
+        const f=getFood(id);
+        if (!f?.active||f.qty<1) throw new Error('This food is no longer available');
+        goto('food',{selectedFood:id,qty:1});break;
+      }
+      case 'decreaseQty':S.qty=Math.max(1,S.qty-1);render();break;
+      case 'increaseQty':S.qty=Math.min(getFood(S.selectedFood)?.qty||0,S.qty+1);render();break;
+      case 'addCart': {
+        requireUser('customer');
+        const f=getFood(S.selectedFood);
+        if (!f?.active||f.qty<1) throw new Error('This food is no longer available');
+        if (S.cart.length&&getFood(S.cart[0].id)?.rid!==f.rid) throw new Error('Your cart contains food from another restaurant');
+        const old=S.cart.find(c=>c.id===f.id);
+        if (!Number.isInteger(S.qty)||S.qty<1||S.qty+(old?.qty||0)>f.qty) throw new Error('Maximum available quantity reached');
+        if (old) old.qty+=S.qty; else S.cart.push({id:f.id,qty:S.qty,price:f.price});
+        goto('checkout');toast('Added to cart');break;
+      }
+      case 'cartMinus':case 'cartPlus':case 'cartRemove': {
+        const card=e.target.closest('.orderItem'),fid=Number(card?.querySelector('.cartItemId')?.value);
+        const c=S.cart.find(c=>c.id===fid);
+        if (!c) break;
+        if (action==='cartRemove') S.cart=S.cart.filter(c=>c.id!==fid);
+        else if (action==='cartMinus') c.qty=Math.max(1,c.qty-1);
+        else c.qty=Math.min(getFood(fid)?.qty||0,c.qty+1);
+        render();break;
+      }
+      case 'backToFoods':goto('restaurant',{selectedRid:S.cart.length?getFood(S.cart[0].id).rid:S.selectedRid});break;
+      case 'confirmOrder':createOrder();goto('status');toast('Order confirmed');break;
+      case 'cancelOrder': {
+        const o=selectedCustomerOrder();if (!o) break;
+        cancelOrder(o.id);render();toast('Order cancelled. Items returned to inventory.');break;
+      }
+      case 'viewLatest': {
+        const o=recentCustomerOrder();if (!o) throw new Error('You have no confirmed orders yet');
+        goto('status',{selectedOrder:o.id});break;
+      }
+      case 'openOrder':goto('status',{selectedOrder:id});break;
+      case 'inventoryApply': {
+        const date=document.getElementById('invDate').value.trim();
+        if (date&&!validDate(date)) throw new Error('Enter a valid date in YYYY-MM-DD format');
+        S.inventorySearch=document.getElementById('invSearch').value;
+        S.inventoryCategory=document.getElementById('invCat').value;S.inventoryDate=date;render();break;
+      }
+      case 'inventoryClear':S.inventorySearch='';S.inventoryCategory='All categories';S.inventoryDate='';render();break;
+      case 'editFood':goto('editfood',{managerFoodId:id});break;
+      case 'toggleFoodActive': {
+        const f=managerFoods().find(f=>f.id===S.managerFoodId);
+        if (!f) throw new Error('Food item not found');
+        if (f.active) showDialog('Remove this food item?','It will no longer be available to customers. Existing orders keep their purchased details.','confirmRemove','Remove');
+        else {transact(db=>{db.foods.find(item=>item.id===f.id).active=true;});goto('inventory');toast('Listing restored');}
+        break;
+      }
+      case 'confirmRemove': {
+        const f=managerFoods().find(f=>f.id===S.managerFoodId);
+        if (!f) throw new Error('Food item not found');
+        transact(db=>{db.foods.find(item=>item.id===f.id).active=false;});
+        document.getElementById('dialogMount').innerHTML='';goto('inventory');toast('Listing removed');break;
+      }
+      case 'openMgrOrder':goto('mdetails',{selectedManagerOrder:id});break;
+      case 'rejectMgr':showDialog('Reject this order?','A rejected order is final. Its items return to inventory.','confirmReject','Reject order');break;
+      case 'confirmReject':changeStatus(S.selectedManagerOrder,'Rejected');document.getElementById('dialogMount').innerHTML='';render();toast('Order rejected. Items returned to inventory.');break;
+      case 'acceptMgr':case 'readyMgr':case 'finishMgr': {
+        const o=selectedManagerOrder();if (!o) throw new Error('Order not found');
+        const target=action==='acceptMgr'?'Accepted':action==='readyMgr'?'Ready':o.type==='Pickup'?'Picked Up':'Delivered';
+        changeStatus(o.id,target);render();toast('Order status updated: '+target);break;
+      }
+      case 'reminderMgr':createReminder(S.selectedManagerOrder);render();toast('Reminder saved to the customer’s order.');break;
+      case 'setupRestaurant':goto('mhome');S.setupOpen=true;render();break;
+      case 'laterSetup':S.setupOpen=false;render();break;
+      case 'closeDialog':document.getElementById('dialogMount').innerHTML='';break;
+      case 'confirmReset':document.getElementById('dialogMount').innerHTML='';resetData();render();toast('Demo reset to starting accounts and inventory');break;
+      default:break;
+    }
+  } catch(error) { toast(error.message); }
+}
+document.addEventListener('click',e=>{
+  const route=e.target.closest('[data-route]');
+  if (route) {
+    e.preventDefault();
+    if (route.dataset.route==='editfood') S.managerFoodId=null;
+    goto(route.dataset.route);return;
+  }
+  const action=e.target.closest('[data-act]');
+  if (action) {e.preventDefault();handleAct(action.dataset.act,e);}
+});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if (t.dataset.show) {
+    if (t.dataset.show==='registerPasswords') document.querySelectorAll('input[name="password"],input[name="confirm"]').forEach(input=>input.type=t.checked?'text':'password');
+    else {const input=document.getElementById(t.dataset.show);if(input)input.type=t.checked?'text':'password';}
+    return;
+  }
+  if (t.name==='fulfillment') S.fulfillment=t.value;
+  if (t.id==='foodCat') {S.foodCategory=t.value;recalcFoods();}
+  if (t.id==='foodPrice') {S.foodPrice=t.value;recalcFoods();}
+  if (t.id==='mgrOrderFilter') {S.managerFilter=t.value;render();}
+  if (t.id==='mgrHistoryFilter') {S.historyFilter=t.value;render();}
+});
+document.addEventListener('input',e=>{
+  if (e.target.id==='foodSearch') {S.foodSearch=e.target.value;recalcFoods();}
+  if (e.target.id==='restaurantCity') {S.restaurantSearch=e.target.value;recalcRestaurant();}
+});
+async function submitForm(kind,x) {
+  if (kind==='login') {
+    await authenticate(String(x.get('email')||''),String(x.get('password')||''));return;
+  }
+  if (kind==='register') {
+    const name=String(x.get('name')||'').trim(),email=String(x.get('email')||'').trim().toLowerCase();
+    const phone=String(x.get('phone')||'').trim(),address=String(x.get('address')||'').trim(),password=String(x.get('password')||'');
+    if (!name||!address) throw new Error('Enter your name and address');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Please enter a valid email address');
+    if (phone.replace(/\D/g,'').length<7) throw new Error('Enter a phone number with at least 7 digits');
+    if (password.length<8) throw new Error('Use at least 8 characters');
+    if (password!==x.get('confirm')) throw new Error('Passwords do not match');
+    const role=x.get('role')==='Customer'?'customer':x.get('role')==='Restaurant Manager'?'manager':null;
+    if (!role) throw new Error('Choose an account type');
+    if (D.users.some(u=>u.email===email)) throw new Error('Email already registered');
+    const hash=await passwordHash(password);
+    transact(db=>{db.users.push({id:nextId(db.users),name,email,phone,address,role,passwordHash:hash});});
+    S.loginRole=null;
+    goto('login');toast('Account created successfully. Log in with your new account.');return;
+  }
+  if (kind==='profile') {
+    const u=currentUser();if (!u) throw new Error('Please sign in before changing your profile');
+    const name=String(x.get('name')||'').trim(),phone=String(x.get('phone')||'').trim(),address=String(x.get('address')||'').trim();
+    if (!name||!phone||!address) throw new Error('Enter your name, phone number and address');
+    transact(db=>Object.assign(db.users.find(user=>user.id===u.id),{name,phone,address}));
+    render();toast('Profile updated successfully');return;
+  }
+  if (kind==='editFood') {saveFood(x);return;}
+  if (kind==='restaurant') {
+    const user=requireUser('manager');
+    if (managerRestaurant()) throw new Error('Your restaurant is already set up');
+    const name=String(x.get('name')||'').trim(),city=String(x.get('city')||'').trim(),address=String(x.get('address')||'').trim();
+    if (!name||!city||!address) throw new Error('Enter all three restaurant details');
+    transact(db=>{db.restaurants.push({id:nextId(db.restaurants),managerId:user.id,name,city,address});});
+    S.setupOpen=false;render();toast('Restaurant saved');
+  }
+}
+document.addEventListener('submit',async e=>{
+  const form=e.target.closest('form[data-form]');if (!form) return;
+  e.preventDefault();if (S.busy) return;
+  const x=new FormData(form),button=form.querySelector('button:not([type="button"])');
+  S.busy=true;if(button)button.disabled=true;
+  try {await submitForm(form.dataset.form,x);}
+  catch(error) {toast(error.message);}
+  finally {S.busy=false;if(button)button.disabled=false;}
+});
+document.getElementById('screenPicker').addEventListener('change',e=>{
+  if (e.target.value==='editfood') S.managerFoodId=null;
+  goto(e.target.value);
+});
+document.getElementById('resetBtn').addEventListener('click',()=>showDialog('Reset this demo?','This clears accounts, restaurant changes, orders and reminders saved in this browser, and restores the demo accounts.','confirmReset','Reset demo'));
+document.getElementById('homeBtn').addEventListener('click',()=>goto('welcome'));
+document.getElementById('switchBtn').addEventListener('click',()=>logout(true));
+document.getElementById('expandBtn').addEventListener('click',()=>{
+  document.body.classList.toggle('expView');
+  document.getElementById('expandBtn').textContent=document.body.classList.contains('expView')?'⊡ Exit':'⤢ View';
+});
+window.addEventListener('storage',event=>{
+  if (event.key!==STORAGE_KEY) return;
+  D=loadData();S.cart=[];
+  const role=requiredRole(S.screen);
+  if (role&&currentUser()?.role!==role) S.screen='welcome';
+  render();toast('Demo data updated in another tab. The cart was cleared.');
+});
+initNav();
+if (currentUser()) S.screen=currentUser().role==='manager'?'mhome':'home';
+render();
+if(storageNotice)toast(storageNotice);
+
 </script>
 </body>
 </html>
