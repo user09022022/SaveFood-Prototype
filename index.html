@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>SaveFood — Interactive Prototype · Database Integration</title>
-<meta name="savefood-prototype-version" content="2026-11-17-db-7ac5dfea"/>
+<meta name="savefood-prototype-version" content="2026-11-19-main-bc346393"/>
 <style>
 :root{--g:#2e7d32;--bg:#f9fafb;--ink:#1f1f1f;--sub:#6b7280;--bd:#e5e7eb;--white:#fff;--soft:#f8faf8;--logo:#e8f5e9;--hint:#9ca3af;--amber:#fff8e1;--ambertext:#8a6500;--red:#d32f2f;--greenlight:#eef7ef}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Roboto,'Arial',system-ui,sans-serif;color:var(--ink);background:#eaf0ed}button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:var(--g)}
@@ -20,18 +20,22 @@
 </head>
 <body>
 <div class="workspace">
-<aside class="panel"><div class="brand"><span class="logoCircle" id="sideLogo"></span><div><h1>SaveFood</h1><small>Interactive prototype</small></div></div><p class="intro muted">Recreation of the latest committed Android layouts and connected customer / manager workflows.</p><div class="badge">Database integration · 17 Nov 2026</div><div id="sidebar"></div><h2>Repository</h2><p class="metaP">Snapshot: <code>7ac5dfea</code><br><span class="versionLabel">feature/giovan-database-integration</span><br>Java + Android XML recreation<br>Browser demo data<br><span id="sessionInfo"></span></p></aside>
+<aside class="panel"><div class="brand"><span class="logoCircle" id="sideLogo"></span><div><h1>SaveFood</h1><small>Interactive prototype</small></div></div><p class="intro muted">Recreation of the latest committed Android layouts and connected customer / manager workflows.</p><div class="badge">Synced with Android main · 19 Nov 2026</div><div id="sidebar"></div><h2>Repository</h2><p class="metaP">Snapshot: <code>bc346393</code><br><span class="versionLabel">main · merged PR #12</span><br>Java + Android XML recreation<br>Browser demo data<br><span id="sessionInfo"></span></p></aside>
 <main class="stage"><div class="stageCol"><div class="stageHeader"><div class="headerTitle"><h2 id="outerTitle">Welcome</h2><p id="outerSubtitle">Clickable UI recreation · source fidelity, not a build</p></div><div class="mobilePicker"><select id="screenPicker" aria-label="Jump to a screen"></select></div><div class="row"><button class="auxBtn" id="resetBtn" title="Reset all browser-only demo data">↻ Reset</button><button class="auxBtn" id="switchBtn">Demo login</button><button class="auxBtn" id="homeBtn">⌂ Start</button><button class="auxBtn" id="expandBtn">⤢ View</button></div></div><div class="device" id="device"><div class="sys"><span class="clock">9:41</span><svg class="rsvg" viewBox="0 0 24 24"><path fill="currentColor" d="M1 15 12 5l11 10-11 0z"/></svg><svg class="rsvg" viewBox="0 0 24 24"><rect fill="currentColor" x="1" y="14" width="4" height="8" rx="1"/><rect fill="currentColor" x="7" y="10" width="4" height="12" rx="1"/><rect fill="currentColor" x="13" y="6" width="4" height="16" rx="1"/><rect fill="currentColor" x="19" y="2" width="4" height="20" rx="1"/></svg><svg class="rsvg" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="5" y="8" width="13" height="8" rx="1" fill="currentColor"/></svg></div><div class="screen" id="screen" aria-live="polite"></div><div id="navMount"></div><div class="androidBottom"><i></i></div><div class="toast" id="toast" role="status"></div><div id="dialogMount"></div></div><div class="footerNote"><span id="persistenceInfo"></span> This web prototype uses browser storage and is separate from the Android SQLite database.</div></div></main>
 <aside class="panel right"><h1 style="font-size:18px">Prototype guide</h1><p class="muted">Test both roles in the same browser. Use Switch account between roles.</p>
 <div class="sourceCard"><b>Customer journey</b><p>Log in → search Vancouver → Green Garden → Vegetable Sandwich → Checkout → Confirm.</p></div>
 <div class="sourceCard"><b>Manager journey</b><p>Switch account → manager login → Orders → Accept → Ready → Create reminder → Picked Up / Delivered.</p></div>
 <div class="sourceCard"><b>Check the result</b><p>Switch back to the customer. Open Order History to see the same order, status, total and reminder. Cancellation or rejection returns stock.</p></div>
+<div class="sourceCard"><b>Two companion resources</b><p>This clickable prototype follows the Android <code>main</code> implementation at <a href="https://github.com/user09022022/SaveFood-CSIS3175/commit/bc346393897ee6985be9e0ce94398cae8dab75d0" target="_blank" rel="noopener">bc346393</a>. The branch-only source used for the prior prototype has no Android code changes relative to this merged commit.</p><p><a href="./learning/#demo" target="_blank" rel="noopener">Open the guided demo and learning journey</a></p></div>
 <h2>Quick start</h2><button class="guidebtn" data-route="welcome">Welcome / launch screen</button><button class="guidebtn" data-act="demoLogin" data-role="customer">Customer login</button><button class="guidebtn" data-act="demoLogin" data-role="manager">Manager login</button><button class="guidebtn" data-route="register">Create a new account</button>
+<h2>Course demonstration route</h2>
+<p class="metaP">1. Manager: set up a restaurant, add food and set the quantity.<br>2. Customer: find the restaurant, order an item, and choose Pickup or Delivery.<br>3. Manager: Accept → Ready → create a reminder → Picked Up / Delivered.<br>4. Customer: verify history and reminder. Separately test Pending cancellation and manager rejection; stock should be restored.</p>
+<p class="metaP">Use one browser for both roles. The demo accounts below are <b>browser-only</b>, not Android database credentials. Confirm actual Android behavior on an emulator before presenting.</p>
 <h2>Demo accounts</h2><p class="metaP">Customer<br><b>customer@savefood.test</b><br>Manager<br><b>manager@savefood.test</b><br>Password for both: <b>Demo123!</b></p>
 <h2>New account workflow</h2><p class="metaP">Register as a manager, then set up a restaurant on the dashboard. Add food, switch to a customer, and search the same city. Profile changes, listings, orders, reminders and sessions survive refresh. Reset restores the starting demo.</p>
 <h2>Demo scope</h2><p class="metaP">Sample accounts and food are preloaded for this web demo. The demo manager owns Green Garden. Other sample restaurants are for browsing. Your teammates each have their own browser data; use one browser to demonstrate both roles. No email or push message is sent. Guest browsing, password recovery and dietary filtering remain unavailable, matching the inspected app.</p>
 <p class="metaP">Browser storage simulates the Android Room / SQLite persistence. It does not connect to your Android installation. The screen layouts are source-based recreations, not emulator screenshots.</p>
-<p class="metaP"><a href="https://github.com/user09022022/SaveFood-Prototype/blob/main/index.html" target="_blank" rel="noopener">View / download standalone HTML</a></p></aside>
+<p class="metaP"><a href="https://github.com/user09022022/SaveFood-Prototype/blob/main/index.html" target="_blank" rel="noopener">View / download standalone HTML</a><br><a href="./learning/" target="_blank" rel="noopener">Team Learning Journey</a><br><a href="https://github.com/user09022022/SaveFood-CSIS3175/tree/bc346393897ee6985be9e0ce94398cae8dab75d0/SaveFood" target="_blank" rel="noopener">Reviewed Android implementation</a></p></aside>
 </div>
 <script>
 'use strict';
@@ -55,8 +59,8 @@ const seedRestaurants=[{id:101,name:'Green Garden',city:'Vancouver',address:'123
 const seedFoods=[{id:501,rid:101,name:'Vegetable Sandwich',description:'Fresh vegetables on whole grain bread',category:'Sandwiches',orig:8.5,price:4.25,qty:5},{id:502,rid:101,name:'Fruit Salad',description:'Assorted seasonal fruit',category:'Salads',orig:7,price:3.5,qty:0},{id:503,rid:102,name:'Bread Surprise Bag',description:'Assorted fresh bakery items',category:'Bakery',orig:12,price:6,qty:6},{id:504,rid:102,name:'Cheese Croissant',description:'Fresh baked cheese croissant',category:'Bakery',orig:5,price:2.5,qty:3},{id:505,rid:103,name:'Rice Bowl',description:'Rice with vegetables and sauce',category:'Meals',orig:13,price:6.5,qty:4},{id:506,rid:103,name:'Veggie Wrap',description:'Vegetable wrap with dressing',category:'Wraps',orig:9.75,price:4.5,qty:0}];
 
 // Standalone browser demonstration of the inspected Android workflow.
-const PROTOTYPE_VERSION = '2026-11-17-db-7ac5dfea';
-const SOURCE_COMMIT = '7ac5dfea2b2f60258039808aa0a4a91ee0c44b60';
+const PROTOTYPE_VERSION = '2026-11-19-main-bc346393';
+const SOURCE_COMMIT = 'bc346393897ee6985be9e0ce94398cae8dab75d0';
 const STORAGE_KEY = 'savefood_prototype_v2';
 const DEMO_HASH = '831aa5fa459ef208ee94c7fa659c80e1:72121a868e0eb164b03ee6af3a05878a89ad14f1376d176dbd85dbf4c7e2970f';
 const clone = value => JSON.parse(JSON.stringify(value));
@@ -437,7 +441,7 @@ function render() {
   document.querySelectorAll('.navChoice').forEach(n=>n.classList.toggle('active',n.dataset.route===S.screen));
   document.getElementById('switchBtn').textContent=currentUser()?'Switch account':'Demo login';
   document.getElementById('sessionInfo').textContent=currentUser()?`Signed in: ${currentUser().name} · ${currentUser().role}`:'Not signed in';
-  document.getElementById('outerSubtitle').textContent='Database integration · updated 17 Nov 2026';
+  document.getElementById('outerSubtitle').textContent='Database integration · verified main 19 Nov 2026';
   document.getElementById('persistenceInfo').textContent=storageWorks?'Changes and sign-in stay in this browser after refresh. The cart clears on refresh, as it does after an Android process restart.':'Storage unavailable: changes last only while this page stays open.';
   if (S.screen==='login'&&S.loginRole) {
     document.querySelector('#loginForm input[name="email"]').value=S.loginRole+'@savefood.test';
